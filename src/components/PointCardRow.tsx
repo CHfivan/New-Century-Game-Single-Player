@@ -132,7 +132,7 @@ export const PointCardRow: React.FC<PointCardRowProps> = ({
         ))}
         
         <div className="deck-card">
-          <img src={assetUrl('/assets/image/VP_card.png')} alt="Victory Point Deck" />
+          <img src={assetUrl('/assets/image/VP_card.webp')} alt="Victory Point Deck" />
         </div>
       </div>
 

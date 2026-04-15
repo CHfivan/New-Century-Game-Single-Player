@@ -136,7 +136,7 @@ export const MerchantCardRow: React.FC<MerchantCardRowProps> = ({
           )
         })}
         <div className="deck-card">
-          <img src={assetUrl('/assets/image/Merchant_card.png')} alt="Merchant Card Deck" />
+          <img src={assetUrl('/assets/image/Merchant_card.webp')} alt="Merchant Card Deck" />
         </div>
       </div>
 
