@@ -26,7 +26,7 @@ export const DEFAULT_CONFIG: GameConfig = {
       brown: 0 
     },
     player4_5: { 
-      yellow: 4, 
+      yellow: 3, 
       red: 1, 
       green: 0, 
       brown: 0 
@@ -48,12 +48,15 @@ export const DEFAULT_CONFIG: GameConfig = {
 }
 
 /**
- * Helper function to get starting spices based on player position
+ * Helper function to get starting spices based on player seat position.
+ * Player 1 (index 0): 3 yellow
+ * Players 2-3 (index 1-2): 4 yellow
+ * Players 4-5 (index 3-4): 3 yellow + 1 red (saffron)
  */
-export function getStartingSpices(playerIndex: number, totalPlayers: number) {
+export function getStartingSpices(playerIndex: number, _totalPlayers: number) {
   if (playerIndex === 0) {
     return { ...DEFAULT_CONFIG.startingSpices.player1 }
-  } else if (totalPlayers <= 3) {
+  } else if (playerIndex <= 2) {
     return { ...DEFAULT_CONFIG.startingSpices.player2_3 }
   } else {
     return { ...DEFAULT_CONFIG.startingSpices.player4_5 }

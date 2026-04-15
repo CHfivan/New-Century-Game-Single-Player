@@ -3,13 +3,14 @@ import { render, screen } from '@testing-library/react'
 import App from './App'
 
 describe('App', () => {
-  it('renders the demo component', () => {
+  it('renders the loading screen initially', () => {
     render(<App />)
     expect(screen.getByText(/Century: Spice Road/)).toBeDefined()
+    expect(screen.getByText(/Loading game assets/)).toBeDefined()
   })
 
-  it('renders the start game button', () => {
+  it('shows a progress indicator', () => {
     render(<App />)
-    expect(screen.getByText(/New Game/)).toBeDefined()
+    expect(screen.getByText(/0%/)).toBeDefined()
   })
 })
