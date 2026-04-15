@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Player } from '../types'
 import { CaravanGrid } from './CaravanGrid'
+import { assetUrl } from '../utils/assetUrl'
 import './OpponentPanel.css'
 
 interface OpponentCardProps {
@@ -130,7 +131,7 @@ export const OpponentPanel: React.FC<OpponentPanelProps> = ({
         aria-label={isExpanded ? 'Collapse panel' : 'Expand panel'}
         style={{ right: `${buttonRight}px` }}
       >
-        <img src="/assets/image/players.png" alt="" className="toggle-icon" />
+        <img src={assetUrl('/assets/image/players.png')} alt="" className="toggle-icon" />
         {isExpanded ? '▶' : '◀'}
       </button>
 

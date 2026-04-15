@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { MerchantCard } from '../types'
 import { CardEffectDisplay } from './CardEffectDisplay'
+import { assetUrl } from '../utils/assetUrl'
 import { createPortal } from 'react-dom'
 import './PlayerHand.css'
 
@@ -164,7 +165,7 @@ export const PlayerHand: React.FC<PlayerHandProps> = ({
         onClick={handleToggle}
         aria-label={isVisible ? 'Hide hand' : 'Show hand'}
       >
-        <img src="/assets/image/hand2.jpg" alt="" className="toggle-icon" />
+        <img src={assetUrl('/assets/image/hand2.jpg')} alt="" className="toggle-icon" />
         {isVisible ? 'Hide' : 'Show'}
       </button>
 

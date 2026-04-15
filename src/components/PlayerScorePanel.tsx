@@ -4,6 +4,7 @@
  */
 
 import React from 'react'
+import { assetUrl } from '../utils/assetUrl'
 import './PlayerScorePanel.css'
 
 interface PlayerScorePanelProps {
@@ -27,11 +28,11 @@ export const PlayerScorePanel: React.FC<PlayerScorePanelProps> = React.memo(({
         <span className="score-value">{score}</span>
       </div>
       <div className="score-item" title={`${goldCoins} gold coins`}>
-        <img src="/assets/image/gold_coin.png" alt="Gold coins" className="coin-icon" />
+        <img src={assetUrl('/assets/image/gold_coin.png')} alt="Gold coins" className="coin-icon" />
         <span className="score-value">{goldCoins}</span>
       </div>
       <div className="score-item" title={`${silverCoins} silver coins`}>
-        <img src="/assets/image/silver_coin.png" alt="Silver coins" className="coin-icon" />
+        <img src={assetUrl('/assets/image/silver_coin.png')} alt="Silver coins" className="coin-icon" />
         <span className="score-value">{silverCoins}</span>
       </div>
       <div className="score-item" title={`${victoryCardsCount} victory cards`}>

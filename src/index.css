@@ -30,7 +30,7 @@ body {
   min-width: 320px;
   height: 100%;
   max-height: 100vh;
-  background-image: url('/assets/image/bg3.jpeg');
+  /* background-image is set dynamically in main.tsx to support base URL */
   background-size: cover;
   background-position: center;
   overflow: hidden;

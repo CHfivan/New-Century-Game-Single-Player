@@ -3,21 +3,27 @@
  */
 
 import { MerchantCard, PointCard } from '../types'
+import { assetUrl } from '../utils/assetUrl'
 import merchantCardsData from './merchant-cards.json'
 import pointCardsData from './point-cards.json'
+
+/** Prepend base URL to card imageUrl */
+function fixImageUrl<T extends { imageUrl: string }>(card: T): T {
+  return { ...card, imageUrl: assetUrl(card.imageUrl) }
+}
 
 /**
  * Load all merchant cards from JSON data
  */
 export function loadMerchantCards(): MerchantCard[] {
-  return merchantCardsData as MerchantCard[]
+  return (merchantCardsData as MerchantCard[]).map(fixImageUrl)
 }
 
 /**
  * Load all point cards from JSON data
  */
 export function loadPointCards(): PointCard[] {
-  return pointCardsData as PointCard[]
+  return (pointCardsData as PointCard[]).map(fixImageUrl)
 }
 
 /**

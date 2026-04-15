@@ -6,6 +6,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { MerchantCard, SpiceType, SpiceCollection } from '../types'
 import { CardEffectDisplay } from './CardEffectDisplay'
+import { assetUrl } from '../utils/assetUrl'
 import { createPortal } from 'react-dom'
 import './MerchantCardRow.css'
 
@@ -135,7 +136,7 @@ export const MerchantCardRow: React.FC<MerchantCardRowProps> = ({
           )
         })}
         <div className="deck-card">
-          <img src="/assets/image/Merchant_card.png" alt="Merchant Card Deck" />
+          <img src={assetUrl('/assets/image/Merchant_card.png')} alt="Merchant Card Deck" />
         </div>
       </div>
 

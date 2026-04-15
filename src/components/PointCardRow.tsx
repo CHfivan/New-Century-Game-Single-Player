@@ -5,6 +5,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { PointCard } from '../types'
+import { assetUrl } from '../utils/assetUrl'
 import { createPortal } from 'react-dom'
 import './PointCardRow.css'
 
@@ -21,7 +22,7 @@ interface PointCardRowProps {
 /** Renders a single coin image with a count label */
 const CoinStack: React.FC<{ count: number; type: 'gold' | 'silver' }> = React.memo(({ count, type }) => {
   if (count <= 0) return null
-  const src = type === 'gold' ? '/assets/image/gold_coin.png' : '/assets/image/silver_coin.png'
+  const src = type === 'gold' ? assetUrl('/assets/image/gold_coin.png') : assetUrl('/assets/image/silver_coin.png')
   const alt = type === 'gold' ? 'Gold Coin' : 'Silver Coin'
   return (
     <div className="coin-stack">
@@ -131,7 +132,7 @@ export const PointCardRow: React.FC<PointCardRowProps> = ({
         ))}
         
         <div className="deck-card">
-          <img src="/assets/image/VP_card.png" alt="Victory Point Deck" />
+          <img src={assetUrl('/assets/image/VP_card.png')} alt="Victory Point Deck" />
         </div>
       </div>
 
