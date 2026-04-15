@@ -1,0 +1,321 @@
+/* Demo styles */
+
+.demo-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.game-board-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  width: 100%;
+  padding: 16px 20px 220px 20px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .game-board-content {
+    padding: 16px 8px 130px 8px;
+    justify-content: flex-start;
+    overflow: visible;
+    min-height: auto;
+  }
+}
+
+h1 {
+  color: #333;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+h2, h3 {
+  color: #555;
+  text-align: center;
+}
+
+.demo-container p {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.btn-primary, .btn-action {
+  padding: var(--button-padding, 12px 24px);
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.08);
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-action:hover:not(:disabled) {
+  background: #0b7dda;
+  transform: translateY(-3px);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.15),
+    0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.btn-action:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:disabled, .btn-action:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+/* Turn indicator banner at top center */
+.turn-banner {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 300;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 900px) {
+  .turn-banner {
+    padding: 4px 14px;
+    font-size: 11px;
+    top: 6px;
+  }
+}
+
+/* Floating banner for spice payment mode */
+.acquire-floating-banner {
+  position: fixed;
+  left: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 12px;
+  z-index: 500;
+  animation: bob 2s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.acquire-floating-banner .banner-text {
+  font-weight: 600;
+}
+
+.acquire-floating-banner .banner-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.acquire-floating-banner .banner-btn {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.acquire-floating-banner .banner-btn.confirm {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.acquire-floating-banner .banner-btn.confirm:hover:not(:disabled) {
+  background: #45a049;
+}
+
+.acquire-floating-banner .banner-btn.confirm:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.acquire-floating-banner .banner-btn.cancel {
+  background: #555;
+  color: #fff;
+}
+
+.acquire-floating-banner .banner-btn.cancel:hover {
+  background: #666;
+}
+
+@media (max-width: 900px) {
+  .acquire-floating-banner {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+}
+
+/* Game start fade-in overlay */
+@keyframes game-fade-in {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.game-fade-overlay {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 1000;
+  animation: game-fade-in 1s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Card dealing animation — cards slide in from the deck */
+@keyframes card-deal-in {
+  0% {
+    opacity: 0;
+    transform: translateX(40px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Card dealing animation — applied when cards first mount during dealing */
+@keyframes card-deal-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(60px) rotate(5deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-5px) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+/* Card dealing from deck — slides from right (deck position) to left (card position) */
+@keyframes card-deal-from-deck {
+  0% {
+    opacity: 0;
+    transform: translateX(var(--deal-offset, 200px)) rotateY(180deg);
+  }
+  40% {
+    opacity: 1;
+    transform: translateX(calc(var(--deal-offset, 200px) * 0.3)) rotateY(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+  }
+}
+
+.card-dealing {
+  animation: card-deal-from-deck 0.5s ease-out backwards;
+}
+
+/* During dealing, hide all cards initially and stagger their appearance */
+.row-dealing .card-wrapper,
+.row-dealing .merchant-card {
+  opacity: 0;
+  animation: card-deal-from-deck 0.5s ease-out forwards;
+}
+
+/* Point cards: stagger from left to right, 200ms apart */
+.row-dealing .card-wrapper:nth-child(1) { animation-delay: 0ms; --deal-offset: 500px; }
+.row-dealing .card-wrapper:nth-child(2) { animation-delay: 200ms; --deal-offset: 400px; }
+.row-dealing .card-wrapper:nth-child(3) { animation-delay: 400ms; --deal-offset: 300px; }
+.row-dealing .card-wrapper:nth-child(4) { animation-delay: 600ms; --deal-offset: 200px; }
+.row-dealing .card-wrapper:nth-child(5) { animation-delay: 800ms; --deal-offset: 100px; }
+
+/* Merchant cards: stagger from left to right, 200ms apart, starting after point cards (1200ms offset) */
+.row-dealing-merchant .merchant-card:nth-child(1) { animation-delay: 1200ms; --deal-offset: 600px; }
+.row-dealing-merchant .merchant-card:nth-child(2) { animation-delay: 1400ms; --deal-offset: 500px; }
+.row-dealing-merchant .merchant-card:nth-child(3) { animation-delay: 1600ms; --deal-offset: 400px; }
+.row-dealing-merchant .merchant-card:nth-child(4) { animation-delay: 1800ms; --deal-offset: 300px; }
+.row-dealing-merchant .merchant-card:nth-child(5) { animation-delay: 2000ms; --deal-offset: 200px; }
+.row-dealing-merchant .merchant-card:nth-child(6) { animation-delay: 2200ms; --deal-offset: 100px; }
+
+/* Hide deck cards during dealing until their row is done */
+.row-dealing .deck-card { opacity: 1; }
+
+/* Before dealing starts, hide all cards but keep deck visible */
+.row-pre-deal .card-wrapper,
+.row-pre-deal .merchant-card {
+  opacity: 0;
+}
+.row-pre-deal .deck-card { opacity: 1; }
+
+/* Hide overflow during dealing to prevent scrollbar flicker */
+.row-dealing .card-row-container,
+.row-pre-deal .card-row-container,
+.row-dealing-merchant .card-row-container {
+  overflow: hidden !important;
+}

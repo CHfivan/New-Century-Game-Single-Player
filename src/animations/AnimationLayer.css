@@ -1,0 +1,89 @@
+.animation-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 900;
+}
+
+/* DOM clone wrapper — renders captured outerHTML pixel-identically */
+.anim-dom-clone {
+  pointer-events: none;
+  will-change: left, top, opacity;
+  overflow: visible;
+}
+
+/* Ensure the cloned element inside fills the wrapper exactly */
+.anim-dom-clone > * {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  position: relative !important;
+  box-shadow: inherit;
+}
+
+.anim-card-fly {
+  position: fixed;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  will-change: left, top, width, height, opacity;
+  box-sizing: border-box;
+}
+
+.anim-card-fly img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Effect overlay inside animated card clones */
+.anim-card-with-effect {
+  position: fixed;
+}
+
+.anim-effect-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 4px;
+  pointer-events: none;
+}
+
+.anim-cube-move {
+  position: fixed;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  will-change: left, top, opacity;
+}
+
+/* Shake animation for error feedback */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-6px); }
+  30% { transform: translateX(5px); }
+  45% { transform: translateX(-4px); }
+  60% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  90% { transform: translateX(1px); }
+}
+
+.anim-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Red flash for error */
+@keyframes red-flash {
+  0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.6); }
+  50% { box-shadow: 0 0 12px 4px rgba(255, 0, 0, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}
+
+.anim-shake {
+  animation: shake 0.4s ease-in-out, red-flash 0.4s ease-in-out;
+}

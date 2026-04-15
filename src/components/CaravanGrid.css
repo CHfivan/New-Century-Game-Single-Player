@@ -1,0 +1,112 @@
+.caravan-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+  width: fit-content;
+  margin: 8px 0;
+}
+
+.caravan-box {
+  width: 32px;
+  height: 32px;
+  border: 2px solid;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.caravan-box.filled {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.caravan-box.empty {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ccc;
+}
+
+.caravan-box.clickable {
+  cursor: pointer;
+}
+
+.caravan-box.clickable:hover {
+  filter: brightness(1.3);
+}
+
+.caravan-box.clickable:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.caravan-box.cube-selected {
+  border-color: #fff !important;
+  box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.7), 0 0 16px 6px rgba(255, 215, 0, 0.4);
+  transform: scale(1.15);
+  z-index: 1;
+}
+
+/* Picked cube: pulsing white border */
+.caravan-box.picked {
+  border-color: #fff !important;
+  box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.7), 0 0 16px 6px rgba(255, 215, 0, 0.4);
+  transform: scale(1.15);
+  z-index: 1;
+  animation: pulse-pick 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-pick {
+  0% { box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.7), 0 0 16px 6px rgba(255, 215, 0, 0.4); }
+  100% { box-shadow: 0 0 12px 5px rgba(255, 255, 255, 0.9), 0 0 24px 10px rgba(255, 215, 0, 0.6); }
+}
+
+/* Used cube: greyed out, not interactive */
+.caravan-box.used {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(0.6);
+}
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .caravan-grid {
+    gap: 2px;
+    margin: 2px 0;
+  }
+
+  .caravan-box {
+    width: 18px;
+    height: 18px;
+    border-width: 1px;
+    border-radius: 2px;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .caravan-grid {
+    gap: 6px;
+    margin: 12px 0;
+  }
+
+  .caravan-box {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+    border-radius: 5px;
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .caravan-grid {
+    gap: 8px;
+    margin: 14px 0;
+  }
+
+  .caravan-box {
+    width: 48px;
+    height: 48px;
+    border-width: 4px;
+    border-radius: 6px;
+  }
+}

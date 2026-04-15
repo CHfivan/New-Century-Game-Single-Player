@@ -1,0 +1,320 @@
+.player-hand-container {
+  position: fixed;
+  bottom: 32px;
+  z-index: 99;
+  transition: transform 0.3s ease;
+  height: 148px;
+  overflow: visible;
+}
+
+.player-hand-container.hidden {
+  /* Slide container fully left — toggle tab (at left:100%) lands exactly at caravan's right edge */
+  transform: translateX(-100%);
+}
+
+.hand-toggle {
+  position: absolute;
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%);
+  left: 100%;
+  padding: 1px 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-size: 8px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  z-index: 250; /* Above score panel (150) and action buttons (200) */
+  /* 1/6 of original height (44px / 6 ≈ 7.3px) */
+  min-width: 30px;
+  min-height: 7.3px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.toggle-icon {
+  width: 6px;
+  height: 6px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.hand-toggle:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.hand-toggle:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.player-hand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 0 4px 0 0;
+  height: 100%;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+  overflow: visible;
+}
+
+.hand-card {
+  position: relative;
+  width: 88px;
+  height: calc(148px - 14px); /* 134px — fills most of the 148px container */
+  background: #f0f0f0;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.hand-card:not(:first-child) {
+  /* margin-left set dynamically via inline style */
+}
+
+.hand-card:hover {
+  transform: translateY(-10px) scale(1.08);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  border-color: #FFD700;
+  z-index: 10;
+}
+
+.hand-card.selected {
+  transform: translateY(-20px) scale(1.15);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  border-color: #FFD700;
+  z-index: 500;
+  position: relative;
+  visibility: hidden; /* Hide original — portal overlay renders the visible copy */
+}
+
+.hand-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.hand-card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: #333;
+}
+
+.hand-card:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Image occupies full card area (req 11.5) */
+.card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Effect overlay: left side, light background, max 2 columns (req 11.3) */
+.card-effect-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 4px;
+  pointer-events: none;
+}
+
+.card-effect-text {
+  font-size: 9px;
+  font-weight: 600;
+  color: #222;
+  text-align: center;
+  word-break: break-all;
+  max-width: 100%;
+  line-height: 1.3;
+}
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .player-hand-container {
+    bottom: 34px;
+    height: 90px;
+  }
+
+  .player-hand-container.hidden {
+    transform: translateX(-100%);
+  }
+
+  .hand-card {
+    width: 61px;
+    height: calc(90px - 10px); /* 80px — fills most of the 90px container */
+    border-width: 1px;
+  }
+
+  .hand-card:not(:first-child) {
+    /* margin-left set dynamically via inline style */
+  }
+
+  .hand-card:hover {
+    transform: translateY(-5px) scale(1.05);
+  }
+
+  .card-effect-text {
+    font-size: 7px;
+    padding: 2px;
+  }
+
+  .player-hand {
+    padding: 5px;
+    border-radius: 0 4px 0 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hand-toggle {
+    padding: 4px 6px;
+    font-size: 10px;
+    min-width: 28px;
+    min-height: 44px;
+    gap: 2px;
+    border-radius: 0 4px 4px 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .toggle-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .player-hand-container {
+    bottom: 41px; /* Large desktop action bar height: 25px button + 16px padding = 41px */
+    /* Match large desktop caravan exact height including border */
+    height: 193px; /* 163px content + borders + extra */
+  }
+
+  .player-hand-container.hidden {
+    transform: translateX(calc(-100% + 38px)); /* 38px is large desktop toggle button width */
+  }
+
+  .hand-card {
+    width: 100px;
+    height: 135px;
+    border-width: 3px;
+  }
+
+  .hand-card:not(:first-child) {
+    margin-left: 10px; /* Small gap, no stacking */
+  }
+
+  .hand-card:hover {
+    transform: translateY(-12px) scale(1.08);
+  }
+
+  .card-effect-text {
+    font-size: 11px;
+    padding: 4px;
+  }
+
+  .player-hand {
+    padding: 16px;
+    border-radius: 0 6px 0 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hand-toggle {
+    padding: 1.5px 6px;
+    font-size: 10px;
+    min-width: 38px;
+    min-height: 9.3px; /* 1/6 of 56px */
+    gap: 3px;
+    border-radius: 0 5px 5px 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .toggle-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 2.5px;
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .player-hand-container {
+    bottom: 50px; /* Extra large desktop action bar height: 30px button + 20px padding = 50px */
+    /* Match extra large desktop caravan exact height including border */
+    height: 234px; /* 198px content + borders + extra */
+  }
+
+  .player-hand-container.hidden {
+    transform: translateX(calc(-100% + 44px)); /* 44px is extra large desktop toggle button width */
+  }
+
+  .hand-card {
+    width: 120px;
+    height: 160px;
+    border-width: 4px;
+  }
+
+  .hand-card:not(:first-child) {
+    margin-left: 12px; /* Small gap, no stacking */
+  }
+
+  .hand-card:hover {
+    transform: translateY(-15px) scale(1.08);
+  }
+
+  .card-effect-text {
+    font-size: 13px;
+    padding: 6px;
+  }
+
+  .player-hand {
+    padding: 20px;
+    border-radius: 0 7px 0 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hand-toggle {
+    padding: 2px 8px;
+    font-size: 12px;
+    min-width: 44px;
+    min-height: 10.7px; /* 1/6 of 64px */
+    gap: 4px;
+    border-radius: 0 6px 6px 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .toggle-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+}

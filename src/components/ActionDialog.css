@@ -1,0 +1,458 @@
+/**
+ * ActionDialog styles
+ * Modal dialogs for multi-step game actions
+ */
+
+.action-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.action-dialog {
+  background: #1a1a2e;
+  border: 2px solid #4a4a6a;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 280px;
+  max-width: 420px;
+  width: 90vw;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.action-dialog h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #a0c4ff;
+  text-align: center;
+}
+
+.action-dialog-body {
+  margin-bottom: 16px;
+}
+
+.action-dialog-info {
+  font-size: 11px;
+  color: #ddd;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Conversion dialog */
+.conversion-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.conversion-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.conversion-row label {
+  flex: 1;
+  color: #ddd;
+}
+
+.conversion-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.conversion-count button {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  background: #2a2a4a;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.conversion-count button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.conversion-count span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.upgrades-remaining {
+  font-size: 10px;
+  color: #aaa;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Exchange dialog */
+.exchange-info {
+  background: #2a2a4a;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 11px;
+  text-align: center;
+}
+
+.exchange-arrow {
+  font-size: 16px;
+  margin: 0 8px;
+}
+
+.exchange-count-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.exchange-count-control button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  background: #2a2a4a;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.exchange-count-control button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.exchange-count-control span {
+  font-size: 20px;
+  font-weight: bold;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Discard dialog — visual caravan grid */
+.discard-info {
+  font-size: 11px;
+  color: #ff9999;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.discard-caravan-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.discard-cube {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.15s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.discard-cube:hover {
+  transform: scale(1.15);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.discard-cube:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.discard-cube.marked {
+  border-color: #ff4444;
+  opacity: 0.5;
+  transform: scale(0.85);
+  box-shadow: 0 0 8px rgba(255, 68, 68, 0.6);
+}
+
+.discard-spice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.discard-spice-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spice-label {
+  flex: 1;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spice-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.spice-dot.yellow { background: #FFD700; }
+.spice-dot.red { background: #DC143C; }
+.spice-dot.green { background: #228B22; }
+.spice-dot.brown { background: #8B4513; }
+
+.discard-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.discard-count button {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  background: #2a2a4a;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.discard-count button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.discard-count span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.discard-total {
+  font-size: 11px;
+  text-align: center;
+  margin-top: 8px;
+  color: #aaa;
+}
+
+.discard-total.over-limit {
+  color: #ff6666;
+  font-weight: bold;
+}
+
+/* Acquire dialog */
+.acquire-info {
+  font-size: 11px;
+  color: #ccc;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.acquire-spice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acquire-spice-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.acquire-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.acquire-count button {
+  width: 24px;
+  height: 24px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  background: #2a2a4a;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.acquire-count button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.acquire-count span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.acquire-total {
+  font-size: 11px;
+  text-align: center;
+  margin-top: 8px;
+  color: #aaa;
+}
+
+.acquire-total.wrong-amount {
+  color: #ff6666;
+}
+
+/* Dialog footer buttons */
+.action-dialog-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Visual option rows for conversion/exchange */
+.visual-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.visual-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.visual-option:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.visual-option.selected {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: #FFD700;
+}
+
+.visual-option:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.option-arrow {
+  font-size: 16px;
+  color: #ccc;
+  flex-shrink: 0;
+}
+
+.option-count {
+  font-size: 10px;
+  color: #aaa;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.spice-cubes-inline {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.cube-inline {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  display: inline-block;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.dialog-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.dialog-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.dialog-btn.cancel {
+  background: #555;
+  color: #fff;
+}
+
+.dialog-btn.cancel:hover {
+  background: #666;
+}
+
+.dialog-btn.confirm {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.dialog-btn.confirm:hover:not(:disabled) {
+  background: #45a049;
+}
+
+.dialog-btn.confirm:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Error message */
+.dialog-error {
+  font-size: 10px;
+  color: #ff6666;
+  text-align: center;
+  margin-top: 8px;
+  min-height: 14px;
+}

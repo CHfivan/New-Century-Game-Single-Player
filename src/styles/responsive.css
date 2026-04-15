@@ -1,0 +1,321 @@
+/**
+ * Responsive breakpoints and utilities
+ * Mobile-first approach with landscape orientation focus
+ */
+
+/* Breakpoint definitions */
+:root {
+  /* Mobile: up to 768px width (phones in landscape) */
+  --mobile-max: 768px;
+  
+  /* Tablet: 769px to 1024px width (tablets in landscape) */
+  --tablet-min: 769px;
+  --tablet-max: 1024px;
+  
+  /* Desktop: 1025px and above */
+  --desktop-min: 1025px;
+  
+  /* Touch target minimum size (WCAG 2.1 Level AAA) */
+  --touch-target-min: 44px;
+  
+  /* Spacing scale */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Font sizes */
+  --font-xs: 10px;
+  --font-sm: 12px;
+  --font-md: 14px;
+  --font-lg: 16px;
+  --font-xl: 18px;
+  --font-xxl: 24px;
+}
+
+/* Mobile styles (default, mobile-first) */
+@media (max-width: 768px) {
+  :root {
+    --card-width: 80px;
+    --card-height: 110px;
+    --button-padding: 10px 16px;
+    --panel-width: 250px;
+    --panel-width-collapsed: 50px;
+  }
+  
+  /* Ensure all interactive elements meet touch target size */
+  button,
+  .card,
+  .hand-card,
+  .hamburger-icon,
+  .panel-toggle {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  /* Increase spacing for better touch interaction */
+  .cards {
+    gap: var(--spacing-md);
+  }
+  
+  /* Larger text for readability on small screens */
+  body {
+    font-size: var(--font-md);
+  }
+  
+  h1 {
+    font-size: var(--font-xxl);
+  }
+  
+  h2 {
+    font-size: var(--font-xl);
+  }
+  
+  h3 {
+    font-size: var(--font-lg);
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --card-width: 100px;
+    --card-height: 140px;
+    --button-padding: 12px 20px;
+    --panel-width: 280px;
+    --panel-width-collapsed: 55px;
+  }
+  
+  body {
+    font-size: var(--font-md);
+  }
+  
+  h1 {
+    font-size: 28px;
+  }
+  
+  h2 {
+    font-size: 22px;
+  }
+  
+  h3 {
+    font-size: var(--font-xl);
+  }
+}
+
+/* Mobile styles — portrait phones (up to 480px wide) */
+@media (max-width: 480px) {
+  :root {
+    --card-width: 60px;
+    --card-height: 85px;
+    --button-padding: 8px 12px;
+    --panel-width: 180px;
+    --panel-width-collapsed: 40px;
+  }
+
+  button,
+  .card,
+  .hand-card,
+  .hamburger-icon,
+  .panel-toggle {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  .cards {
+    gap: var(--spacing-sm);
+  }
+
+  body {
+    font-size: var(--font-sm);
+  }
+
+  h1 { font-size: var(--font-xl); }
+  h2 { font-size: var(--font-lg); }
+  h3 { font-size: var(--font-md); }
+}
+
+/* Mobile landscape / small tablets (481px–900px) — covers S22+ landscape (832px wide) */
+@media (min-width: 481px) and (max-width: 900px) {
+  :root {
+    --card-width: 70px;
+    --card-height: 95px;
+    --button-padding: 8px 14px;
+    --panel-width: 200px;
+    --panel-width-collapsed: 44px;
+  }
+
+  button,
+  .card,
+  .hand-card,
+  .hamburger-icon,
+  .panel-toggle {
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+
+  body {
+    font-size: var(--font-sm);
+  }
+
+  h1 { font-size: var(--font-xxl); }
+  h2 { font-size: var(--font-xl); }
+  h3 { font-size: var(--font-lg); }
+}
+
+/* Tablet styles (901px–1024px) */
+@media (min-width: 901px) and (max-width: 1024px) {
+  :root {
+    --card-width: 100px;
+    --card-height: 140px;
+    --button-padding: 12px 20px;
+    --panel-width: 280px;
+    --panel-width-collapsed: 55px;
+  }
+
+  body {
+    font-size: var(--font-md);
+  }
+
+  h1 { font-size: 28px; }
+  h2 { font-size: 22px; }
+  h3 { font-size: var(--font-xl); }
+}
+
+/* Desktop styles */
+@media (min-width: 1025px) {
+  :root {
+    --card-width: 120px;
+    --card-height: 160px;
+    --button-padding: 12px 24px;
+    --panel-width: 300px;
+    --panel-width-collapsed: 60px;
+  }
+  
+  body {
+    font-size: var(--font-lg);
+  }
+  
+  h1 {
+    font-size: 32px;
+  }
+  
+  h2 {
+    font-size: 24px;
+  }
+  
+  h3 {
+    font-size: var(--font-xl);
+  }
+}
+
+/* Large desktop styles (1920px and above) */
+@media (min-width: 1920px) {
+  :root {
+    --card-width: 150px;
+    --card-height: 200px;
+    --button-padding: 14px 28px;
+    --panel-width: 350px;
+    --panel-width-collapsed: 70px;
+  }
+  
+  body {
+    font-size: 18px;
+  }
+  
+  h1 {
+    font-size: 40px;
+  }
+  
+  h2 {
+    font-size: 30px;
+  }
+  
+  h3 {
+    font-size: 22px;
+  }
+}
+
+/* Extra large desktop styles (2560px and above) */
+@media (min-width: 2560px) {
+  :root {
+    --card-width: 180px;
+    --card-height: 240px;
+    --button-padding: 16px 32px;
+    --panel-width: 400px;
+    --panel-width-collapsed: 80px;
+  }
+  
+  body {
+    font-size: 20px;
+  }
+  
+  h1 {
+    font-size: 48px;
+  }
+  
+  h2 {
+    font-size: 36px;
+  }
+  
+  h3 {
+    font-size: 26px;
+  }
+}
+
+/* Utility classes for responsive visibility */
+.mobile-only {
+  display: block;
+}
+
+.tablet-only,
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mobile-only,
+  .desktop-only {
+    display: none;
+  }
+  
+  .tablet-only {
+    display: block;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-only,
+  .tablet-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* Responsive grid utilities */
+.responsive-grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

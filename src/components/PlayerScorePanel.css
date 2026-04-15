@@ -1,0 +1,151 @@
+.player-score-panel {
+  position: fixed;
+  bottom: 30px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 11px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 126px;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.score-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.score-value {
+  color: #000;
+  font-weight: bold;
+}
+
+.coin-icon {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+}
+
+.score-label-mobile {
+  display: none;
+}
+
+.score-label-desktop {
+  display: inline;
+}
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .player-score-panel {
+    bottom: 34px;
+    right: 0;
+    padding: 4px 6px;
+    min-width: 0;
+    gap: 3px;
+    border-width: 1px;
+    border-radius: 4px 0 0 0;
+  }
+
+  .score-item {
+    font-size: 16px;
+    gap: 4px;
+  }
+
+  .score-label {
+    font-size: 16px;
+  }
+
+  .score-value {
+    font-size: 16px;
+  }
+
+  .coin-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Hide text labels, show emoji icons on mobile */
+  .score-label-desktop {
+    display: none;
+  }
+
+  .score-label-mobile {
+    display: inline;
+    font-size: 14px;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .player-score-panel {
+    bottom: 41px;
+    right: 0;
+    padding: 20px;
+    min-width: 220px;
+    gap: 16px;
+    border-width: 3px;
+    border-radius: 14px;
+  }
+
+  .score-item {
+    font-size: 20px;
+    gap: 10px;
+  }
+
+  .score-label {
+    font-size: 18px;
+  }
+
+  .score-value {
+    font-size: 20px;
+  }
+
+  .coin-icon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .player-score-panel {
+    bottom: 50px;
+    right: 0;
+    padding: 24px;
+    min-width: 260px;
+    gap: 18px;
+    border-width: 4px;
+    border-radius: 16px;
+  }
+
+  .score-item {
+    font-size: 24px;
+    gap: 12px;
+  }
+
+  .score-label {
+    font-size: 22px;
+  }
+
+  .score-value {
+    font-size: 24px;
+  }
+
+  .coin-icon {
+    width: 36px;
+    height: 36px;
+  }
+}

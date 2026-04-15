@@ -1,0 +1,392 @@
+.point-card-row {
+  margin: 20px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.row-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.coins-display {
+  font-size: 14px;
+  color: #666;
+  font-weight: normal;
+}
+
+.card-row-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  align-items: flex-end;
+}
+
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.coin-bonus-top {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bonus-coin-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.deck-card {
+  width: var(--card-width, 120px);
+  height: calc(var(--card-width, 120px) * 13 / 9);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: default;
+}
+
+.deck-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Point card: image fills card, cost bar at bottom (req 11.4, 11.5) ── */
+.point-card {
+  position: relative;
+  width: var(--card-width, 120px);
+  height: calc(var(--card-width, 120px) * 13 / 9); /* 9:13 portrait ratio */
+  background: #f0f0f0;
+  border: 2px solid #FF9800;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover: enlarge + highlight border (req 11.6, 7.8) */
+.point-card:hover:not(.disabled):not(.selected) {
+  transform: translateY(-10px) scale(1.08);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  border-color: #FFD700;
+  z-index: 10;
+}
+
+/* Selected state: gold border, slight scale (actual overlay via portal) */
+.point-card.selected {
+  border-color: #FFD700;
+  z-index: 10;
+}
+
+.point-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.point-card:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Portal overlay for selected point card */
+.point-card-overlay {
+  position: relative;
+}
+
+.point-card-overlay .card-points-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(255, 152, 0, 0.92);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  line-height: 1.4;
+}
+
+.point-card-overlay .card-cost-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+/* Image occupies the full card area (req 11.5) */
+.point-card .card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.point-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Points badge overlaid on image (top-right) */
+.card-points-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(255, 152, 0, 0.92);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  line-height: 1.4;
+}
+
+/* Cost bar: thin light bar at bottom row (req 11.4) */
+.card-cost-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 4px;
+  pointer-events: none;
+}
+
+.cost-spice {
+  width: 12px;
+  height: 12px;
+  border-radius: 1px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.cost-yellow { background: #DAA520; }
+.cost-red    { background: #C0392B; }
+.cost-green  { background: #27AE60; }
+.cost-brown  { background: #7B4F2E; }
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .point-card-row {
+    margin: 8px 0;
+  }
+
+  .point-card {
+    width: 70px;
+    height: calc(70px * 13 / 9);
+    border-width: 1px;
+    flex-shrink: 0;
+  }
+
+  .card-points-badge {
+    font-size: 9px;
+    padding: 1px 4px;
+    top: 3px;
+    right: 3px;
+  }
+
+  .card-cost-bar {
+    height: 16px;
+    gap: 2px;
+    padding: 0 2px;
+  }
+
+  .cost-spice {
+    width: 8px;
+    height: 8px;
+  }
+
+  .row-title {
+    font-size: 13px;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 6px;
+  }
+
+  .coins-display {
+    font-size: 10px;
+  }
+
+  .card-row-container {
+    gap: 6px;
+    padding: 0 6px;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+    justify-content: flex-start;
+    max-width: 100vw;
+  }
+
+  .card-wrapper {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .coin-bonus-top {
+    height: 22px;
+  }
+
+  .bonus-coin-img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .deck-card {
+    width: 70px;
+    height: calc(70px * 13 / 9);
+    flex-shrink: 0;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .point-card {
+    width: 150px;
+    height: calc(150px * 13 / 9);
+  }
+
+  .card-points-badge {
+    font-size: 16px;
+    padding: 3px 8px;
+    top: 6px;
+    right: 6px;
+  }
+
+  .card-cost-bar {
+    height: 28px;
+    gap: 6px;
+  }
+
+  .cost-spice {
+    width: 14px;
+    height: 14px;
+  }
+
+  .row-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .coins-display {
+    font-size: 18px;
+  }
+
+  .card-row-container {
+    gap: 16px;
+    padding: 0 30px;
+  }
+
+  .coin-bonus-top {
+    height: 50px;
+  }
+
+  .bonus-coin-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .deck-card {
+    width: 150px;
+    height: calc(150px * 13 / 9);
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .point-card {
+    width: 180px;
+    height: calc(180px * 13 / 9);
+  }
+
+  .card-points-badge {
+    font-size: 20px;
+    padding: 4px 10px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .card-cost-bar {
+    height: 34px;
+    gap: 8px;
+  }
+
+  .cost-spice {
+    width: 16px;
+    height: 16px;
+  }
+
+  .row-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  .coins-display {
+    font-size: 20px;
+  }
+
+  .card-row-container {
+    gap: 20px;
+    padding: 0 40px;
+  }
+
+  .coin-bonus-top {
+    height: 60px;
+  }
+
+  .bonus-coin-img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .deck-card {
+    width: 180px;
+    height: calc(180px * 13 / 9);
+  }
+}
+
+/* Coin stack styles */
+.coin-stack {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.coin-count-badge {
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}

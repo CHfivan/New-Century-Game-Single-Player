@@ -1,0 +1,129 @@
+.action-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 6px 10px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.action-btn {
+  padding: 6px 10px;
+  font-size: 7px;
+  font-weight: 600;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 50px;
+  text-align: center;
+  min-height: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.action-btn.primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.action-btn.primary:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.secondary {
+  background: #2196F3;
+  color: white;
+}
+
+.action-btn.secondary:hover:not(:disabled) {
+  background: #0b7dda;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn:disabled {
+  background: #ccc;
+  color: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .action-buttons {
+    padding: 3px 6px;
+    gap: 4px;
+  }
+
+  .action-btn {
+    padding: 4px 8px;
+    font-size: 9px;
+    min-width: 44px;
+    min-height: 28px;
+    border-radius: 6px;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .action-buttons {
+    padding: 8px 15px;
+    gap: 10px;
+  }
+
+  .action-btn {
+    padding: 8px 14px;
+    font-size: 9px;
+    min-width: 65px;
+    min-height: 25px;
+    border-radius: 30px;
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .action-buttons {
+    padding: 10px 20px;
+    gap: 12px;
+  }
+
+  .action-btn {
+    padding: 10px 18px;
+    font-size: 11px;
+    min-width: 80px;
+    min-height: 30px;
+    border-radius: 35px;
+  }
+}
+
+.action-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Error message displayed above action buttons */
+.action-error-message {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(200, 50, 50, 0.9);
+  color: #fff;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  cursor: pointer;
+  margin-bottom: 4px;
+  max-width: 90vw;
+  text-align: center;
+}

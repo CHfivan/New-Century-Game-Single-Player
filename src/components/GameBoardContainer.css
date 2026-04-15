@@ -1,0 +1,17 @@
+.game-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: right 0.3s ease-in-out;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* On mobile, add padding so content can scroll above fixed bottom UI */
+@media (max-width: 900px) {
+  .game-board-container {
+    padding-bottom: 140px; /* space for caravan + hand + action buttons */
+  }
+}

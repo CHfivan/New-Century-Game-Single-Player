@@ -1,0 +1,72 @@
+.turn-indicator {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  z-index: 150;
+  text-align: center;
+  min-width: 250px;
+}
+
+.turn-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.turn-number {
+  color: #ffd700;
+}
+
+.turn-separator {
+  color: #666;
+}
+
+.current-player {
+  color: white;
+}
+
+.turn-status {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.turn-status.human {
+  background: #4CAF50;
+  color: white;
+}
+
+.turn-status.ai {
+  background: #2196F3;
+  color: white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .turn-indicator {
+    top: 10px;
+    padding: 8px 16px;
+    min-width: 200px;
+  }
+
+  .turn-info {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .turn-status {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+}

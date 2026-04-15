@@ -1,0 +1,279 @@
+/* NewGameDialog styles */
+
+.new-game-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: ngd-fade-in 0.2s ease;
+}
+
+@keyframes ngd-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.new-game-dialog {
+  background: #1a1a2e;
+  border-radius: 14px;
+  padding: 32px;
+  min-width: 340px;
+  max-width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  position: relative;
+  animation: ngd-slide-in 0.25s ease;
+}
+
+@keyframes ngd-slide-in {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.new-game-dialog h2 {
+  margin: 0 0 24px 0;
+  color: #FFD700;
+  font-size: 22px;
+  text-align: center;
+}
+
+.ngd-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.ngd-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.ngd-close:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.ngd-section {
+  margin-bottom: 20px;
+}
+
+.ngd-section label {
+  display: block;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ngd-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ngd-option {
+  padding: 8px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ngd-option:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ngd-option.selected {
+  border-color: #FFD700;
+  background: rgba(255, 215, 0, 0.15);
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.ngd-option:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.ngd-preview {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ngd-preview-title {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+}
+
+.ngd-preview-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ngd-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.ngd-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.ngd-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.ngd-btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ngd-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ngd-btn-start {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.ngd-btn-start:hover {
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+  transform: translateY(-1px);
+}
+
+.ngd-btn-start:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .new-game-dialog {
+    min-width: 280px;
+    padding: 24px;
+  }
+
+  .new-game-dialog h2 {
+    font-size: 20px;
+  }
+}
+
+/* Mobile landscape — very limited vertical space */
+@media (max-height: 500px) {
+  .new-game-overlay {
+    align-items: center;
+  }
+
+  .new-game-dialog {
+    min-width: auto;
+    width: 90vw;
+    max-width: 400px;
+    max-height: 95vh;
+    max-height: 95dvh;
+    padding: 12px 16px;
+    overflow-y: auto;
+  }
+
+  .new-game-dialog h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .ngd-section {
+    margin-bottom: 10px;
+  }
+
+  .ngd-section label {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .ngd-options {
+    gap: 4px;
+  }
+
+  .ngd-option {
+    padding: 4px 10px;
+    font-size: 12px;
+    min-height: 32px;
+    min-width: 32px;
+  }
+
+  .ngd-preview {
+    padding: 8px 10px;
+    margin-bottom: 12px;
+  }
+
+  .ngd-preview-title {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .ngd-preview-text {
+    font-size: 12px;
+  }
+
+  .ngd-actions {
+    gap: 6px;
+  }
+
+  .ngd-btn {
+    padding: 6px 16px;
+    font-size: 12px;
+    min-height: 32px;
+  }
+
+  .ngd-close {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    font-size: 14px;
+    top: 8px;
+    right: 8px;
+  }
+}

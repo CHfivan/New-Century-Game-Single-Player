@@ -1,0 +1,154 @@
+.player-caravan-fixed {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #4CAF50;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 150;
+  min-width: 200px;
+}
+
+.played-cards-btn {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 4px;
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  border: 1px solid #666;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  z-index: 151;
+}
+
+.played-cards-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.caravan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #4CAF50;
+}
+
+.caravan-header h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.spice-count {
+  font-size: 12px;
+  font-weight: bold;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .player-caravan-fixed {
+    bottom: 34px;
+    left: 0;
+    padding: 4px 6px;
+    min-width: 80px;
+    height: 90px;
+    box-sizing: border-box;
+    border-width: 1px;
+    border-radius: 0 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .played-cards-btn {
+    padding: 3px 8px;
+    font-size: 9px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+  }
+
+  .caravan-header {
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+    border-bottom-width: 1px;
+  }
+
+  .caravan-header h3 {
+    font-size: 8px;
+    margin: 0;
+  }
+
+  .spice-count {
+    font-size: 7px;
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .player-caravan-fixed {
+    bottom: 41px;
+    left: 0;
+    padding: 16px;
+    min-width: 250px;
+    border-width: 3px;
+    border-radius: 10px;
+  }
+
+  .caravan-header {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom-width: 3px;
+  }
+
+  .caravan-header h3 {
+    font-size: 18px;
+  }
+
+  .spice-count {
+    font-size: 15px;
+    padding: 6px 10px;
+    border-radius: 5px;
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .player-caravan-fixed {
+    bottom: 50px;
+    left: 0;
+    padding: 20px;
+    min-width: 300px;
+    border-width: 4px;
+    border-radius: 12px;
+  }
+
+  .caravan-header {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom-width: 4px;
+  }
+
+  .caravan-header h3 {
+    font-size: 22px;
+  }
+
+  .spice-count {
+    font-size: 18px;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+}

@@ -1,0 +1,388 @@
+.merchant-card-row {
+  margin: 20px 0;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+.row-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.card-row-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 20px 20px 0 20px;
+  align-items: flex-end;
+  overflow: visible;
+  position: relative;
+}
+
+.deck-card {
+  width: var(--card-width, 120px);
+  height: calc(var(--card-width, 120px) * 13 / 9);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: default;
+}
+
+.deck-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Merchant card: image fills the whole card, effect overlaid on left ── */
+.merchant-card {
+  position: relative;
+  width: var(--card-width, 120px);
+  height: calc(var(--card-width, 120px) * 13 / 9);
+  background: #f0f0f0;
+  border: 2px solid #4CAF50;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover: highlight border */
+.merchant-card:hover:not(.disabled) {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border-color: #FFD700;
+  z-index: 10;
+}
+
+/* Selected card being acquired — bright green outline, original hidden (portal overlay shows) */
+.merchant-card.selected {
+  border-color: #00E676;
+  border-width: 3px;
+  z-index: 100;
+  position: relative;
+  animation: none;
+}
+
+.merchant-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.merchant-card:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Drop target: card that needs a cube during payment — original card hidden, portal overlay handles flashing */
+.merchant-card.drop-target {
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.merchant-card.drop-target .card-image img {
+  border-radius: 5px;
+}
+
+.merchant-card.drop-target:hover {
+  visibility: hidden;
+}
+
+/* Card with a placed cube — stops flashing, solid green, visible again */
+.merchant-card.has-placed-cube {
+  border-color: #4CAF50;
+  border-style: solid;
+  animation: none;
+  visibility: visible;
+}
+
+/* Placed cube indicator: small colored square at bottom-right */
+.placed-cube-indicator {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  z-index: 5;
+  cursor: pointer;
+}
+
+/* Persistent spices sitting on a card (bottom-right cluster) */
+.persistent-spices {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-width: 50%;
+  z-index: 5;
+  pointer-events: none;
+  justify-content: flex-end;
+}
+
+.persistent-spice-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Image occupies the full card area (req 11.5) */
+.merchant-card .card-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.merchant-card .card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Effect overlay: left side, light background, column layout */
+.card-effect-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  max-width: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 5px;
+  pointer-events: none;
+}
+
+.card-effect-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Spice squares — colored squares matching spice colors */
+.spice-sq {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.spice-sq-yellow { background: #DAA520; }
+.spice-sq-red    { background: #C0392B; }
+.spice-sq-green  { background: #27AE60; }
+.spice-sq-brown  { background: #7B4F2E; }
+
+.down-arrow {
+  font-size: 14px;
+  font-weight: 900;
+  color: #333;
+  line-height: 1;
+}
+
+.upgrade-arrow {
+  font-size: 14px;
+  font-weight: 900;
+  color: #333;
+  line-height: 1;
+}
+
+.coin-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile adjustments (portrait + landscape phones) */
+@media (max-width: 900px) {
+  .merchant-card-row {
+    margin: 8px 0;
+  }
+
+  .merchant-card {
+    width: 70px;
+    height: calc(70px * 13 / 9);
+    border-width: 1px;
+    flex-shrink: 0;
+  }
+
+  .card-effect-text {
+    font-size: 8px;
+  }
+
+  .card-effect-overlay {
+    padding: 2px 3px;
+  }
+
+  .spice-sq {
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+  }
+  .down-arrow, .upgrade-arrow {
+    font-size: 10px;
+    font-weight: 900;
+  }
+  .row-title {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .card-row-container {
+    gap: 6px;
+    padding: 16px 6px 0 6px;
+    flex-wrap: nowrap;
+    overflow: visible;
+    justify-content: flex-start;
+    max-width: 100vw;
+  }
+
+  .deck-card {
+    width: 70px;
+    height: calc(70px * 13 / 9);
+    flex-shrink: 0;
+  }
+
+  .coin-indicator {
+    font-size: 8px;
+    padding: 1px 3px;
+    border-radius: 2px;
+  }
+
+  .placed-cube-indicator {
+    width: 9px;
+    height: 9px;
+    bottom: 3px;
+    right: 3px;
+    border-width: 1px;
+    border-radius: 2px;
+  }
+
+  .persistent-spices {
+    bottom: 2px;
+    right: 2px;
+    left: auto;
+    gap: 1px;
+  }
+
+  .persistent-spice-dot {
+    width: 8px;
+    height: 8px;
+    border-width: 1px;
+    border-radius: 2px;
+  }
+}
+
+/* Large desktop adjustments */
+@media (min-width: 1920px) {
+  .merchant-card {
+    width: 150px;
+    height: calc(150px * 13 / 9);
+  }
+
+  .card-effect-text {
+    font-size: 14px;
+  }
+
+  .card-effect-overlay {
+    padding: 6px 8px;
+  }
+
+  .row-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .card-row-container {
+    gap: 16px;
+    padding: 0 30px;
+  }
+
+  .deck-card {
+    width: 150px;
+    height: calc(150px * 13 / 9);
+  }
+
+  .coin-indicator {
+    font-size: 13px;
+    padding: 3px 8px;
+    border-radius: 5px;
+  }
+}
+
+/* Extra large desktop adjustments */
+@media (min-width: 2560px) {
+  .merchant-card {
+    width: 180px;
+    height: calc(180px * 13 / 9);
+  }
+
+  .card-effect-text {
+    font-size: 17px;
+  }
+
+  .card-effect-overlay {
+    padding: 8px 10px;
+  }
+
+  .row-title {
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  .card-row-container {
+    gap: 20px;
+    padding: 0 40px;
+  }
+
+  .deck-card {
+    width: 180px;
+    height: calc(180px * 13 / 9);
+  }
+
+  .coin-indicator {
+    font-size: 15px;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+}
+
+/* Portal overlay flash animation for drop-target cards */
+@keyframes drop-overlay-flash {
+  0%, 100% { 
+    border-color: #FFD700;
+    box-shadow: 0 0 12px 4px rgba(255, 215, 0, 0.5);
+  }
+  50% { 
+    border-color: #fff;
+    box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* Preview cube in persistent-spices grid — subtle pulse to distinguish from confirmed cubes */
+.persistent-spice-dot.placed-preview {
+  animation: cube-preview-pulse 1s ease-in-out infinite;
+}
+
+@keyframes cube-preview-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
