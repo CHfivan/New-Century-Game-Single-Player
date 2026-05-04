@@ -142,7 +142,17 @@ export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({ childr
     const s = getSocket()
     setSocket(s)
 
-    const onConnect = () => setConnected(true)
+    const onConnect = () => {
+      setConnected(true)
+      // Auto-reconnect to room if we have a saved session (handles mid-game socket drops)
+      const saved = loadSession()
+      if (saved.sessionToken && saved.roomCode && roomCodeRef.current) {
+        s.emit('room:reconnect', {
+          roomCode: saved.roomCode,
+          sessionToken: saved.sessionToken,
+        })
+      }
+    }
     const onDisconnect = () => setConnected(false)
 
     s.on('connect', onConnect)
