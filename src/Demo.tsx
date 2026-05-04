@@ -1185,10 +1185,10 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
 
 // ─── Multiplayer Flow ─────────────────────────────────────────────────────────
 
-type MultiplayerPhase = 'menu' | 'lobby' | 'playing' | 'reconnecting' | null
+type MultiplayerPhase = 'menu' | 'lobby' | 'playing' | null
 
 const MultiplayerFlow: React.FC<{ phase: MultiplayerPhase; onPhaseChange: (phase: MultiplayerPhase) => void; initialRoomCode?: string | null }> = ({ phase, onPhaseChange, initialRoomCode }) => {
-  const { roomCode, players, isHost, gameState, error, createRoom, joinRoom, leaveRoom, startGame, attemptReconnect, addAI, removeAI, renameAI, connected } = useMultiplayer()
+  const { roomCode, players, isHost, gameState, error, createRoom, joinRoom, leaveRoom, startGame, addAI, removeAI, renameAI } = useMultiplayer()
 
   // Transition to lobby when roomCode becomes available
   useEffect(() => {
@@ -1199,7 +1199,7 @@ const MultiplayerFlow: React.FC<{ phase: MultiplayerPhase; onPhaseChange: (phase
 
   // Transition to playing when gameState becomes available
   useEffect(() => {
-    if ((phase === 'lobby' || phase === 'reconnecting') && gameState) {
+    if (phase === 'lobby' && gameState) {
       onPhaseChange('playing')
     }
   }, [phase, gameState, onPhaseChange])
@@ -1211,53 +1211,10 @@ const MultiplayerFlow: React.FC<{ phase: MultiplayerPhase; onPhaseChange: (phase
     }
   }, [phase, gameState, roomCode, onPhaseChange])
 
-  // Auto-reconnect when entering 'reconnecting' phase
-  useEffect(() => {
-    if (phase === 'reconnecting' && connected) {
-      const success = attemptReconnect()
-      if (!success) {
-        // No saved session — fall back to menu
-        onPhaseChange(null)
-      }
-    }
-  }, [phase, connected, attemptReconnect, onPhaseChange])
-
-  // If reconnect fails (error from server), fall back to menu
-  useEffect(() => {
-    if (phase === 'reconnecting' && error) {
-      // Clear the stale session
-      try {
-        sessionStorage.removeItem('multiplayer-session-token')
-        sessionStorage.removeItem('multiplayer-room-code')
-        sessionStorage.removeItem('multiplayer-player-name')
-      } catch { /* ignore */ }
-      onPhaseChange(null)
-    }
-  }, [phase, error, onPhaseChange])
-
   const handleLeave = useCallback(() => {
     leaveRoom()
     onPhaseChange(null)
   }, [leaveRoom, onPhaseChange])
-
-  if (phase === 'reconnecting') {
-    return (
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        minHeight: '100vh', position: 'fixed', inset: 0,
-      }}>
-        <div style={{
-          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
-          borderRadius: 16, padding: '48px 40px', maxWidth: 400, width: '90%',
-          textAlign: 'center', color: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-          border: '1px solid rgba(255,255,255,0.1)',
-        }}>
-          <h2 style={{ color: '#FFD700', margin: '0 0 12px' }}>Reconnecting...</h2>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Restoring your game session</p>
-        </div>
-      </div>
-    )
-  }
 
   if (phase === 'menu') {
     return (
@@ -1300,18 +1257,18 @@ export const Demo: React.FC = () => {
   const [initialRoomCode, setInitialRoomCode] = useState<string | null>(null)
 
   // On mount, check URL for a room code parameter and auto-navigate to multiplayer join flow
-  // Also check sessionStorage for a saved multiplayer session (reconnect after refresh)
+  // Check URL for invite link on mount
   useEffect(() => {
-    // Check for saved multiplayer session first
-    const savedToken = sessionStorage.getItem('multiplayer-session-token')
-    const savedRoom = sessionStorage.getItem('multiplayer-room-code')
-    if (savedToken && savedRoom) {
-      // Auto-enter multiplayer reconnect mode
-      setMultiplayerPhase('reconnecting' as MultiplayerPhase)
-      return
-    }
+    // Clear any stale multiplayer session data
+    try {
+      sessionStorage.removeItem('multiplayer-session-token')
+      sessionStorage.removeItem('multiplayer-room-code')
+      sessionStorage.removeItem('multiplayer-player-name')
+      sessionStorage.removeItem('multiplayer-is-host')
+      sessionStorage.removeItem('multiplayer-player-icon')
+    } catch { /* ignore */ }
 
-    // Then check URL for invite link
+    // Check URL for invite link
     const params = new URLSearchParams(window.location.search)
     const roomParam = params.get('room')
     if (roomParam) {
