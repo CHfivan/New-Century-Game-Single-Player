@@ -174,6 +174,32 @@ export class GameController {
         newState.winner = 0
         room.status = 'completed'
       }
+    } else if (currentPlayer && currentRoomPlayer.isAI) {
+      // AI player overflow: auto-discard cheapest spices (yellow → red → green → brown)
+      const excess = caravanTotal - 10
+      let remaining = excess
+      const order: Array<'yellow' | 'red' | 'green' | 'brown'> = ['yellow', 'red', 'green', 'brown']
+      for (const spice of order) {
+        if (remaining <= 0) break
+        const canDiscard = Math.min(currentPlayer.caravan[spice], remaining)
+        currentPlayer.caravan[spice] -= canDiscard
+        remaining -= canDiscard
+      }
+
+      // Now advance turn
+      const nextPlayerIndex =
+        (newState.currentPlayerIndex + 1) % newState.players.length
+      newState.currentPlayerIndex = nextPlayerIndex
+      newState.turnNumber = gameState.turnNumber + 1
+
+      // Check for game over
+      if (GameEngine.isGameOver(newState)) {
+        const finalPlayers = GameEngine.calculateFinalScores(newState)
+        newState.players = finalPlayers
+        newState.gamePhase = 'ended'
+        newState.winner = 0
+        room.status = 'completed'
+      }
     }
     // If caravan > 10, turn stays on current player — they must discard via game:discard
 

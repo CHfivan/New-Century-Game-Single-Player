@@ -69,7 +69,49 @@ export const gameReducer = (state: GameState, action: StateAction): GameState =>
         const total = currentP.caravan.yellow + currentP.caravan.red +
           currentP.caravan.green + currentP.caravan.brown
         if (total > 10) {
-          // Caravan overflow — don't advance turn, player must discard first
+          if (currentP.isAI) {
+            // AI overflow: auto-discard cheapest spices
+            const excess = total - 10
+            let remaining = excess
+            const newCaravan = { ...currentP.caravan }
+            const order: Array<'yellow' | 'red' | 'green' | 'brown'> = ['yellow', 'red', 'green', 'brown']
+            for (const spice of order) {
+              if (remaining <= 0) break
+              const canDiscard = Math.min(newCaravan[spice], remaining)
+              newCaravan[spice] -= canDiscard
+              remaining -= canDiscard
+            }
+            const updatedPlayers = state.players.map((p, i) =>
+              i === state.currentPlayerIndex ? { ...p, caravan: newCaravan } : p
+            )
+            // Continue to advance turn with the fixed caravan
+            const nextIdx = (state.currentPlayerIndex + 1) % updatedPlayers.length
+            const isNewRound = nextIdx === 0
+            const stateWithFixedCaravan = { ...state, players: updatedPlayers }
+            const isGameOver = GameEngine.isGameOver(stateWithFixedCaravan)
+            if (isGameOver) {
+              const sortedPlayers = GameEngine.calculateFinalScores(stateWithFixedCaravan)
+              const winnerPlayer = sortedPlayers[0]
+              const winnerIndex = winnerPlayer
+                ? updatedPlayers.findIndex(p => p.id === winnerPlayer.id)
+                : null
+              return {
+                ...stateWithFixedCaravan,
+                gamePhase: 'ended',
+                winner: winnerIndex !== -1 ? winnerIndex : null,
+                currentPlayerIndex: nextIdx,
+                turnNumber: isNewRound ? state.turnNumber + 1 : state.turnNumber,
+                stateSnapshot: null,
+              }
+            }
+            return {
+              ...stateWithFixedCaravan,
+              currentPlayerIndex: nextIdx,
+              turnNumber: isNewRound ? state.turnNumber + 1 : state.turnNumber,
+              stateSnapshot: null,
+            }
+          }
+          // Human overflow — don't advance turn, player must discard first
           return { ...state, stateSnapshot: null }
         }
       }

@@ -13,6 +13,7 @@ interface UseAITurnProps {
   onExecuteAction: (action: GameAction) => void
   onEndTurn: () => void
   onAIAction?: (action: GameAction, state: GameState) => void
+  onDiscard?: (toDiscard: { yellow: number; red: number; green: number; brown: number }) => void
   /** When true, the hook will not schedule any AI turns. */
   disabled?: boolean
 }
@@ -31,7 +32,7 @@ interface UseAITurnProps {
  * We read the latest state via a ref so the timeout closure always
  * sees fresh data.
  */
-export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction, disabled }: UseAITurnProps): void => {
+export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction, onDiscard, disabled }: UseAITurnProps): void => {
   const aiPlayerRef = useRef<AIPlayer | null>(null)
   const timeoutIdsRef = useRef<number[]>([])
 
@@ -43,9 +44,11 @@ export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction, disab
   const onExecuteActionRef = useRef(onExecuteAction)
   const onEndTurnRef = useRef(onEndTurn)
   const onAIActionRef = useRef(onAIAction)
+  const onDiscardRef = useRef(onDiscard)
   onExecuteActionRef.current = onExecuteAction
   onEndTurnRef.current = onEndTurn
   onAIActionRef.current = onAIAction
+  onDiscardRef.current = onDiscard
 
   const clearAllTimeouts = () => {
     for (const id of timeoutIdsRef.current) {

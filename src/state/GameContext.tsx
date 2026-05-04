@@ -75,12 +75,37 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialSta
     dispatch({ type: 'END_TURN' })
   }, [])
 
+  // Handle AI overflow discard in single-player
+  const handleAIDiscard = useCallback((toDiscard: { yellow: number; red: number; green: number; brown: number }) => {
+    const currentP = state.players[state.currentPlayerIndex]
+    if (!currentP) return
+    const playerIndex = state.currentPlayerIndex
+    const updatedPlayers = state.players.map((p, i) => {
+      if (i !== playerIndex) return p
+      return {
+        ...p,
+        caravan: {
+          yellow: p.caravan.yellow - toDiscard.yellow,
+          red: p.caravan.red - toDiscard.red,
+          green: p.caravan.green - toDiscard.green,
+          brown: p.caravan.brown - toDiscard.brown,
+        },
+      }
+    })
+    dispatch({
+      type: 'LOAD_GAME',
+      payload: { ...state, players: updatedPlayers, stateSnapshot: null },
+    })
+    dispatch({ type: 'END_TURN' })
+  }, [state, dispatch])
+
   // Integrate AI turn execution
   useAITurn({
     state,
     onExecuteAction: handleExecuteAction,
     onEndTurn: handleEndTurn,
     onAIAction,
+    onDiscard: handleAIDiscard,
   })
 
   // Create context value

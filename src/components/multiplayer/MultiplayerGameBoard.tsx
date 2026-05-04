@@ -304,6 +304,7 @@ export const MultiplayerGameBoard: React.FC<MultiplayerGameBoardProps> = ({ onLe
     onExecuteAction: handleAIExecuteAction,
     onEndTurn: handleAIEndTurn,
     onAIAction: handleAIAction,
+    onDiscard: sendDiscard,
     disabled: !isHost || !dealingComplete,
   })
 
