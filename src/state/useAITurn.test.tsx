@@ -32,7 +32,7 @@ describe('useAITurn', () => {
     )
 
     // Fast-forward time
-    vi.advanceTimersByTime(3000)
+    vi.advanceTimersByTime(4000)
 
     // Should not execute for human player
     expect(onExecuteAction).not.toHaveBeenCalled()
@@ -55,8 +55,8 @@ describe('useAITurn', () => {
       })
     )
 
-    // Fast-forward past the AI delay (1-2 seconds) and wait for promises
-    await vi.advanceTimersByTimeAsync(2500)
+    // Fast-forward past the AI delay (3-3.75 seconds) and wait for promises
+    await vi.advanceTimersByTimeAsync(3750)
 
     // Verify action was called with valid GameAction
     expect(onExecuteAction).toHaveBeenCalledTimes(1)
@@ -87,7 +87,7 @@ describe('useAITurn', () => {
       })
     )
 
-    vi.advanceTimersByTime(3000)
+    vi.advanceTimersByTime(4000)
 
     expect(onExecuteAction).not.toHaveBeenCalled()
     expect(onEndTurn).not.toHaveBeenCalled()
@@ -109,7 +109,7 @@ describe('useAITurn', () => {
       })
     )
 
-    vi.advanceTimersByTime(3000)
+    vi.advanceTimersByTime(4000)
 
     expect(onExecuteAction).not.toHaveBeenCalled()
     expect(onEndTurn).not.toHaveBeenCalled()
@@ -135,7 +135,7 @@ describe('useAITurn', () => {
       })
     )
 
-    await vi.advanceTimersByTimeAsync(2500)
+    await vi.advanceTimersByTimeAsync(3750)
 
     expect(onExecuteAction).toHaveBeenCalled()
     
@@ -163,7 +163,7 @@ describe('useAITurn', () => {
       })
     )
 
-    await vi.advanceTimersByTimeAsync(2500)
+    await vi.advanceTimersByTimeAsync(3750)
 
     // Verify action was executed (difficulty is internal to AIPlayer)
     expect(onExecuteAction).toHaveBeenCalledTimes(1)

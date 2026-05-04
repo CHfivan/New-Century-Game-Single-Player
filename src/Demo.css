@@ -138,6 +138,12 @@ h2, h3 {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+.turn-banner.your-turn {
+  background: rgba(76, 175, 80, 0.9);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
 @media (max-width: 900px) {
   .turn-banner {
     padding: 4px 14px;
@@ -318,4 +324,172 @@ h2, h3 {
 .row-pre-deal .card-row-container,
 .row-dealing-merchant .card-row-container {
   overflow: hidden !important;
+}
+
+/* Game Over Overlay */
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+
+.game-over-window {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 2px solid #FFD700;
+  border-radius: 16px;
+  padding: 32px;
+  width: 90vw;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.15);
+}
+
+.game-over-title {
+  color: #FFD700;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.game-over-rankings {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.game-over-rank {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.game-over-rank.winner {
+  background: rgba(255, 215, 0, 0.12);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.game-over-rank-num {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  min-width: 28px;
+}
+
+.game-over-rank.winner .game-over-rank-num {
+  color: #FFD700;
+}
+
+.game-over-rank-name {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  text-align: left;
+}
+
+.game-over-rank-score {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFD700;
+}
+
+.game-over-rank-details {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  min-width: 80px;
+  text-align: right;
+}
+
+.game-over-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.game-over-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.5);
+}
+
+.game-over-btn-secondary {
+  background: linear-gradient(135deg, #555, #444);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.game-over-btn-secondary:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.game-over-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .game-over-window {
+    padding: 16px 14px;
+    max-width: 36vw;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .game-over-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .game-over-rankings {
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .game-over-rank {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .game-over-rank-num {
+    font-size: 13px;
+    min-width: 22px;
+  }
+
+  .game-over-rank-name {
+    font-size: 12px;
+  }
+
+  .game-over-rank-score {
+    font-size: 13px;
+  }
+
+  .game-over-rank-details {
+    font-size: 9px;
+    min-width: 60px;
+  }
+
+  .game-over-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
 }

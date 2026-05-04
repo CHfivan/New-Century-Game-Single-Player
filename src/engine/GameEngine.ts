@@ -13,6 +13,7 @@ import {
   createEmptyStatistics,
   DEFAULT_CONFIG,
   getStartingSpices,
+  getVictoryThreshold,
   addSpices,
   subtractSpices,
   getTotalSpices,
@@ -188,12 +189,7 @@ export class GameEngine {
         return { valid: false, error: 'Card is not a spice card' }
       }
 
-      // Check caravan capacity
-      const totalAfter = getTotalSpices(addSpices(player.caravan, card.effect.spices))
-      if (totalAfter > DEFAULT_CONFIG.maxCaravanSize) {
-        return { valid: false, error: 'Caravan would exceed capacity' }
-      }
-
+      // Caravan overflow is allowed — player must discard down to 10 after the action
       return { valid: true }
 
     } else if (isPlayConversionCardPayload(action.payload)) {
@@ -250,11 +246,7 @@ export class GameEngine {
         caravan = addSpices(caravan, card.effect.output)
       }
 
-      // Check caravan capacity
-      if (getTotalSpices(caravan) > DEFAULT_CONFIG.maxCaravanSize) {
-        return { valid: false, error: 'Caravan would exceed capacity' }
-      }
-
+      // Caravan overflow is allowed — player must discard down to 10 after the action
       return { valid: true }
     }
 
@@ -657,17 +649,14 @@ export class GameEngine {
     // 1. Play card actions - for each card in hand
     for (const card of player.hand) {
       if (isSpiceCard(card)) {
-        // Check if playing this spice card would exceed caravan capacity
-        const totalAfter = getTotalSpices(addSpices(player.caravan, card.effect.spices))
-        if (totalAfter <= DEFAULT_CONFIG.maxCaravanSize) {
-          actions.push({
-            type: 'PLAY_CARD',
-            playerId,
-            payload: {
-              cardId: card.id,
-            },
-          })
-        }
+        // Allow playing spice cards even if they'd overflow — player must discard after
+        actions.push({
+          type: 'PLAY_CARD',
+          playerId,
+          payload: {
+            cardId: card.id,
+          },
+        })
       } else if (isConversionCard(card)) {
         // Generate all valid conversion combinations including multi-step upgrades
         // Each upgrade step moves one cube up one level in the chain: Y→R→G→B
@@ -752,7 +741,8 @@ export class GameEngine {
             testCaravan = addSpices(testCaravan, card.effect.output)
           }
           
-          if (valid && getTotalSpices(testCaravan) <= DEFAULT_CONFIG.maxCaravanSize) {
+          // Allow exchange even if it overflows — player must discard after
+          if (valid) {
             actions.push({
               type: 'PLAY_CARD',
               playerId,
@@ -832,9 +822,8 @@ export class GameEngine {
    */
   static isGameOver(state: GameState): boolean {
     // Game ends when any player reaches the victory threshold
-    // 5 point cards for 2-3 players, 6 point cards for 4-5 players
     const playerCount = state.players.length
-    const victoryThreshold = playerCount <= 3 ? 5 : 6
+    const victoryThreshold = getVictoryThreshold(playerCount)
 
     // Check if any player has reached the threshold
     for (const player of state.players) {

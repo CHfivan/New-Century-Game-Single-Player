@@ -4,7 +4,7 @@
  * is served from a subdirectory (e.g., /New-Century-Game-Single-Player/).
  */
 
-const base = import.meta.env.BASE_URL ?? '/'
+const base = (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) || '/'
 
 /**
  * Prepend the Vite base URL to a public asset path.

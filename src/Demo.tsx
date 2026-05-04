@@ -19,16 +19,22 @@ import {
   PlayerScorePanel,
   MainMenu,
   RulesModal,
+  ActionLog,
 } from './components'
+import type { ActionLogEntry } from './components'
 import {
   ConversionDialog,
   ExchangeDialog,
   DiscardDialog,
 } from './components/ActionDialog'
 import { MerchantCard, SpiceCollection, SpiceType, GameAction } from './types/game'
-import { isConversionCard, isExchangeCard, isSpiceCard, getTotalSpices, addSpices } from './types'
+import { isConversionCard, isExchangeCard, isSpiceCard, getTotalSpices, addSpices, getVictoryThreshold } from './types'
 import { GameEngine } from './engine/GameEngine'
 import { useAnimations, AnimationLayer, RowSlideAnimation } from './animations/AnimationLayer'
+import { MultiplayerProvider, useMultiplayer } from './multiplayer/MultiplayerContext'
+import { MultiplayerMenu } from './components/multiplayer/MultiplayerMenu'
+import { Lobby } from './components/multiplayer/Lobby'
+import { MultiplayerGameBoard } from './components/multiplayer/MultiplayerGameBoard'
 import './Demo.css'
 
 /** Capture card positions and DOM HTML for row-slide animation before state update */
@@ -71,7 +77,7 @@ type DialogState =
   | { type: 'exchange'; card: MerchantCard }
   | { type: 'discard'; pendingAction: GameAction }
 
-const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action: GameAction, state: any) => void) | null> }> = ({ aiAnimCallbackRef }) => {
+export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action: GameAction, state: any) => void) | null>; onMultiplayer?: () => void; triggerDealing?: boolean; onLeaveGame?: () => void; onNewGame?: () => void; roomCode?: string | null; isHost?: boolean; onDiscard?: (toDiscard: SpiceCollection) => void }> = ({ aiAnimCallbackRef, onMultiplayer, triggerDealing, onLeaveGame, onNewGame, roomCode, isHost, onDiscard }) => {
   const { state, dispatch, currentPlayer, isHumanTurn } = useGame()
   const [opponentPanelWidth, setOpponentPanelWidth] = useState(300)
   const [playedCardsPlayerId, setPlayedCardsPlayerId] = useState<string | null>(null)
@@ -86,13 +92,92 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
   const [selectedPointIndex, setSelectedPointIndex] = useState<number | null>(null)
   const [merchantRowHidden, setMerchantRowHidden] = useState(false)
   const [pointRowHidden, setPointRowHidden] = useState(false)
-  const [dealingPhase, setDealingPhase] = useState<'fade-in' | 'dealing' | 'done' | null>(null)
+  const [dealingPhase, setDealingPhase] = useState<'fade-in' | 'dealing' | 'done' | null>(triggerDealing ? 'fade-in' : null)
   const [showRulesModal, setShowRulesModal] = useState(false)
+
+  // ── Action Log ──────────────────────────────────────────────────────────────
+  const [actionLog, setActionLog] = useState<ActionLogEntry[]>([])
+  const [showActionLog, setShowActionLog] = useState(false)
+
+  /** Add an entry to the action log by parsing a GameAction */
+  const addLogEntry = useCallback((action: GameAction, gameState: typeof state) => {
+    const player = gameState.players.find(p => p.id === action.playerId)
+    const playerName = player?.name ?? 'Unknown'
+    const turnNumber = gameState.turnNumber
+
+    let entry: ActionLogEntry | null = null
+
+    switch (action.type) {
+      case 'PLAY_CARD': {
+        const payload = action.payload as { cardId: string }
+        // Find the card in the player's hand or played cards
+        const card = player?.hand.find(c => c.id === payload.cardId)
+          ?? player?.playedCards.find(c => c.id === payload.cardId)
+        entry = {
+          playerName,
+          actionType: 'play',
+          description: card ? '' : payload.cardId,
+          turnNumber,
+          card: card ?? undefined,
+        }
+        break
+      }
+      case 'ACQUIRE_CARD': {
+        const payload = action.payload as { cardIndex: number }
+        const card = gameState.merchantCardRow[payload.cardIndex]
+        entry = {
+          playerName,
+          actionType: 'acquire',
+          description: card ? '' : `card #${payload.cardIndex}`,
+          turnNumber,
+          card: card ?? undefined,
+        }
+        break
+      }
+      case 'CLAIM_POINT_CARD': {
+        const payload = action.payload as { cardIndex: number }
+        const pointCard = gameState.pointCardRow[payload.cardIndex]
+        entry = {
+          playerName,
+          actionType: 'claim',
+          description: `${pointCard?.points ?? '?'} VP card`,
+          turnNumber,
+          points: pointCard?.points,
+        }
+        break
+      }
+      case 'REST': {
+        entry = {
+          playerName,
+          actionType: 'rest',
+          description: 'rested',
+          turnNumber,
+        }
+        break
+      }
+    }
+
+    if (entry) {
+      setActionLog(prev => [...prev, entry!])
+    }
+  }, [])
 
   // Animation system
   const { active: activeAnimations, play: playAnimation } = useAnimations()
   const merchantHideCountRef = React.useRef(0)
   const pointHideCountRef = React.useRef(0)
+
+  // Trigger dealing animation on mount when triggerDealing is true (multiplayer game start)
+  useEffect(() => {
+    if (triggerDealing && dealingPhase === 'fade-in') {
+      // Same timing as handleInitGame: fade-in → dealing → done
+      setTimeout(() => {
+        setDealingPhase('dealing')
+        setTimeout(() => setDealingPhase('done'), 3500)
+      }, 1500)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run once on mount
 
   /** Play a row-slide animation with the real row hidden during the animation */
   const playRowSlide = useCallback((
@@ -109,8 +194,8 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
     setHidden(true)
 
     // Calculate when the slide finishes so we can fade in the new card
-    const stagger = slideAnim.staggerDelay ?? 150
-    const slideDur = slideAnim.slideDuration ?? 500
+    const stagger = slideAnim.staggerDelay ?? 225
+    const slideDur = slideAnim.slideDuration ?? 750
     const cardsToSlide = slideAnim.cardRects.length - slideAnim.removedIndex - 1
     const slideEndTime = stagger * cardsToSlide + slideDur
 
@@ -155,6 +240,9 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
   // Register AI animation callback so GameProvider can trigger animations during AI turns
   useEffect(() => {
     aiAnimCallbackRef.current = (action: GameAction, gameState: any) => {
+      // Log AI actions
+      addLogEntry(action, gameState)
+
       if (action.type === 'ACQUIRE_CARD') {
         const payload = action.payload as { cardIndex: number }
         const card = gameState.merchantCardRow?.[payload.cardIndex]
@@ -208,7 +296,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       }
     }
     return () => { aiAnimCallbackRef.current = null }
-  }, [aiAnimCallbackRef, playAnimation, playRowSlide])
+  }, [aiAnimCallbackRef, playAnimation, playRowSlide, addLogEntry])
 
   // Always show the human player's hand/caravan/score, not the current turn's player
   const humanPlayer = state.players.find(p => !p.isAI) || null
@@ -258,8 +346,16 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
   }
 
   const handleRestartGame = () => {
-    if (confirm('Are you sure you want to restart the game?')) {
-      handleInitGame()
+    if (onLeaveGame) {
+      // Multiplayer: leave the room and go back to main menu
+      if (confirm('Are you sure you want to leave the game?')) {
+        onLeaveGame()
+      }
+    } else {
+      // Single player: restart the game
+      if (confirm('Are you sure you want to restart the game?')) {
+        handleInitGame()
+      }
     }
   }
 
@@ -298,6 +394,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
         playerId: hp.id,
         payload: { cardId: selectedCard.id },
       }
+      addLogEntry(action, state)
       dispatch({ type: 'EXECUTE_GAME_ACTION', payload: action })
       
       // Check if caravan overflows after playing
@@ -337,12 +434,13 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
         playerId: hp.id,
         payload,
       }
+      addLogEntry(action, state)
       dispatch({ type: 'COMMIT_ACTION', payload: action })
       dispatch({ type: 'END_TURN' })
       closeDialog()
       clearError()
     },
-    [state.players, dispatch, closeDialog]
+    [state.players, dispatch, closeDialog, addLogEntry, state]
   )
 
   const handleExchangeConfirm = useCallback(
@@ -354,12 +452,13 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
         playerId: hp.id,
         payload,
       }
+      addLogEntry(action, state)
       dispatch({ type: 'COMMIT_ACTION', payload: action })
       dispatch({ type: 'END_TURN' })
       closeDialog()
       clearError()
     },
-    [state.players, dispatch, closeDialog]
+    [state.players, dispatch, closeDialog, addLogEntry, state]
   )
 
   // ─── Action: Acquire Card ─────────────────────────────────────────────────────
@@ -414,6 +513,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
 
       // Create snapshot before executing, in case overflow triggers discard dialog that user may cancel
       dispatch({ type: 'BEGIN_ACTION', payload: { actionType: 'ACQUIRE_CARD' } })
+      addLogEntry(action, state)
       dispatch({ type: 'EXECUTE_GAME_ACTION', payload: action })
       
       // Check overflow from bonus spices on the card
@@ -554,7 +654,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
             color: CUBE_COLORS[cube.type],
             from: { left: caravanRect.left + caravanRect.width / 2, top: caravanRect.top + caravanRect.height / 2, width: 14, height: 14 },
             to: { left: targetRect.left + targetRect.width / 2, top: targetRect.top + targetRect.height - 10, width: 14, height: 14 },
-            duration: 350,
+            duration: 525,
           })
         }
       }
@@ -586,6 +686,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
 
     // Create snapshot before executing, in case overflow triggers discard dialog that user may cancel
     dispatch({ type: 'BEGIN_ACTION', payload: { actionType: 'ACQUIRE_CARD' } })
+    addLogEntry(action, state)
     dispatch({ type: 'EXECUTE_GAME_ACTION', payload: action })
     
     // Check overflow from bonus spices on the acquired card
@@ -662,7 +763,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
               color: CUBE_COLORS_CLAIM[t],
               from: { left: caravanRectClaim.left + caravanRectClaim.width / 2 + i * 8, top: caravanRectClaim.top + caravanRectClaim.height / 2, width: 12, height: 12 },
               to: { left: targetRectClaim.left + targetRectClaim.width / 2, top: targetRectClaim.top + targetRectClaim.height / 2, width: 12, height: 12 },
-              duration: 350,
+              duration: 525,
             })
           }
         }
@@ -691,10 +792,11 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       if (pointSlideAnim) playRowSlide(pointSlideAnim, 'point')
     }
 
+    addLogEntry(action, state)
     dispatch({ type: 'EXECUTE_GAME_ACTION', payload: action })
     dispatch({ type: 'END_TURN' })
     setSelectedPointIndex(null)
-  }, [state, isHumanTurn, selectedPointIndex, dispatch, playAnimation, playRowSlide])
+  }, [state, isHumanTurn, selectedPointIndex, dispatch, playAnimation, playRowSlide, addLogEntry])
 
   const handlePointCardClick = useCallback(
     (_card: any, index: number) => {
@@ -724,16 +826,18 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       return
     }
 
+    const restAction: GameAction = {
+      type: 'REST',
+      playerId: hp.id,
+      payload: {},
+    }
+    addLogEntry(restAction, state)
     dispatch({
       type: 'EXECUTE_GAME_ACTION',
-      payload: {
-        type: 'REST',
-        playerId: hp.id,
-        payload: {},
-      },
+      payload: restAction,
     })
     dispatch({ type: 'END_TURN' })
-  }, [state.players, isHumanTurn, dispatch])
+  }, [state.players, isHumanTurn, dispatch, addLogEntry, state])
 
   // ─── Discard flow ─────────────────────────────────────────────────────────────
 
@@ -742,6 +846,15 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       const hp = state.players.find(p => !p.isAI)
       if (!hp) return
 
+      if (onDiscard) {
+        // Multiplayer: send discard to server, which handles caravan update + turn advance
+        onDiscard(toDiscard)
+        closeDialog()
+        clearError()
+        return
+      }
+
+      // Single player: handle locally
       const playerIndex = state.players.findIndex(p => p.id === hp.id)
       if (playerIndex === -1) return
 
@@ -805,26 +918,16 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       <MainMenu
         onStartGame={handleInitGame}
         onLoadGame={handleLoadGame}
+        onMultiplayer={onMultiplayer}
       />
     )
   }
 
-  if (state.gamePhase === 'ended') {
-    const winner = state.winner !== null ? state.players[state.winner] : null
-    return (
-      <>
-        <HamburgerMenu onShowRules={handleShowRules} onRestartGame={handleRestartGame} />
-        <div className="demo-container">
-          <h1>Game Over!</h1>
-          <h2>Winner: {winner?.name || 'Unknown'}</h2>
-          <p>Final Score: {winner?.score || 0} points</p>
-          <button onClick={() => handleInitGame()} className="btn-primary">
-            Start New Game
-          </button>
-        </div>
-      </>
-    )
-  }
+  // Game over is now shown as an overlay on top of the board (handled below)
+  const isGameOver = state.gamePhase === 'ended'
+  const sortedPlayers = isGameOver
+    ? [...state.players].sort((a, b) => b.score - a.score)
+    : []
 
   const opponents = state.players.filter(p => p.isAI)
   const playedCardsPlayer = playedCardsPlayerId
@@ -847,12 +950,17 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       setPlacedCubes(new Map())
     }}>
       {/* Hamburger Menu */}
-      <HamburgerMenu onShowRules={handleShowRules} onRestartGame={handleRestartGame} />
+      <HamburgerMenu onShowRules={handleShowRules} onRestartGame={handleRestartGame} roomCode={roomCode} isHost={isHost} />
+
+      {/* Action Log Button — below hamburger menu */}
+      <button className="action-log-btn" onClick={() => setShowActionLog(true)} aria-label="View action history" title="Action History">
+        📋 Log
+      </button>
 
       {/* Turn Indicator Banner */}
-      {!isHumanTurn && currentPlayer && (
-        <div className="turn-banner">
-          {state.players[state.currentPlayerIndex]?.name}'s Turn
+      {currentPlayer && (
+        <div className={`turn-banner ${isHumanTurn ? 'your-turn' : ''}`}>
+          {isHumanTurn ? 'Your Turn' : `${state.players[state.currentPlayerIndex]?.name}'s Turn`}
         </div>
       )}
 
@@ -870,6 +978,14 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
           playerName={playedCardsPlayer.name}
           cards={playedCardsPlayer.playedCards}
           onClose={handleClosePlayedCards}
+        />
+      )}
+
+      {/* Action Log Overlay */}
+      {showActionLog && (
+        <ActionLog
+          entries={actionLog}
+          onClose={() => setShowActionLog(false)}
         />
       )}
 
@@ -893,6 +1009,7 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
           goldCoins={humanPlayer.coins.gold}
           silverCoins={humanPlayer.coins.silver}
           victoryCardsCount={humanPlayer.pointCards.length}
+          victoryCardsTarget={getVictoryThreshold(state.players.length)}
         />
       )}
 
@@ -1035,12 +1152,182 @@ const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action
       {dealingPhase === 'fade-in' && (
         <div className="game-fade-overlay" />
       )}
+
+      {/* Game Over Overlay — shown on top of the board */}
+      {isGameOver && (
+        <div className="game-over-overlay">
+          <div className="game-over-window">
+            <h2 className="game-over-title">🏆 Game Over</h2>
+            <div className="game-over-rankings">
+              {sortedPlayers.map((player, rank) => (
+                <div key={player.id} className={`game-over-rank ${rank === 0 ? 'winner' : ''}`}>
+                  <span className="game-over-rank-num">#{rank + 1}</span>
+                  <span className="game-over-rank-name">{player.name}</span>
+                  <span className="game-over-rank-score">{player.score} pts</span>
+                  <span className="game-over-rank-details">
+                    {player.pointCards.length} cards · {player.coins.gold}G {player.coins.silver}S
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="game-over-buttons">
+              {onNewGame && (
+                <button className="game-over-btn" onClick={onNewGame}>
+                  🔄 Another Game
+                </button>
+              )}
+              <button className="game-over-btn game-over-btn-secondary" onClick={() => onLeaveGame ? onLeaveGame() : handleInitGame()}>
+                {onLeaveGame ? '← Back to Menu' : '🔄 New Game'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
+// ─── Multiplayer Flow ─────────────────────────────────────────────────────────
+
+type MultiplayerPhase = 'menu' | 'lobby' | 'playing' | 'reconnecting' | null
+
+const MultiplayerFlow: React.FC<{ phase: MultiplayerPhase; onPhaseChange: (phase: MultiplayerPhase) => void; initialRoomCode?: string | null }> = ({ phase, onPhaseChange, initialRoomCode }) => {
+  const { roomCode, players, isHost, gameState, error, createRoom, joinRoom, leaveRoom, startGame, attemptReconnect, addAI, removeAI, renameAI, connected } = useMultiplayer()
+
+  // Transition to lobby when roomCode becomes available
+  useEffect(() => {
+    if (phase === 'menu' && roomCode) {
+      onPhaseChange('lobby')
+    }
+  }, [phase, roomCode, onPhaseChange])
+
+  // Transition to playing when gameState becomes available
+  useEffect(() => {
+    if ((phase === 'lobby' || phase === 'reconnecting') && gameState) {
+      onPhaseChange('playing')
+    }
+  }, [phase, gameState, onPhaseChange])
+
+  // Transition back to lobby when game is restarted (gameState cleared while playing)
+  useEffect(() => {
+    if (phase === 'playing' && !gameState && roomCode) {
+      onPhaseChange('lobby')
+    }
+  }, [phase, gameState, roomCode, onPhaseChange])
+
+  // Auto-reconnect when entering 'reconnecting' phase
+  useEffect(() => {
+    if (phase === 'reconnecting' && connected) {
+      const success = attemptReconnect()
+      if (!success) {
+        // No saved session — fall back to menu
+        onPhaseChange(null)
+      }
+    }
+  }, [phase, connected, attemptReconnect, onPhaseChange])
+
+  // If reconnect fails (error from server), fall back to menu
+  useEffect(() => {
+    if (phase === 'reconnecting' && error) {
+      // Clear the stale session
+      try {
+        sessionStorage.removeItem('multiplayer-session-token')
+        sessionStorage.removeItem('multiplayer-room-code')
+        sessionStorage.removeItem('multiplayer-player-name')
+      } catch { /* ignore */ }
+      onPhaseChange(null)
+    }
+  }, [phase, error, onPhaseChange])
+
+  const handleLeave = useCallback(() => {
+    leaveRoom()
+    onPhaseChange(null)
+  }, [leaveRoom, onPhaseChange])
+
+  if (phase === 'reconnecting') {
+    return (
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        minHeight: '100vh', position: 'fixed', inset: 0,
+      }}>
+        <div style={{
+          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)',
+          borderRadius: 16, padding: '48px 40px', maxWidth: 400, width: '90%',
+          textAlign: 'center', color: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          border: '1px solid rgba(255,255,255,0.1)',
+        }}>
+          <h2 style={{ color: '#FFD700', margin: '0 0 12px' }}>Reconnecting...</h2>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Restoring your game session</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (phase === 'menu') {
+    return (
+      <MultiplayerMenu
+        onCreateRoom={createRoom}
+        onJoinRoom={joinRoom}
+        onBack={() => onPhaseChange(null)}
+        error={error}
+        prefilledRoomCode={initialRoomCode}
+      />
+    )
+  }
+
+  if (phase === 'lobby' && roomCode) {
+    return (
+      <Lobby
+        roomCode={roomCode}
+        players={players}
+        isHost={isHost}
+        onStartGame={startGame}
+        onLeave={handleLeave}
+        onAddAI={addAI}
+        onRemoveAI={removeAI}
+        onRenameAI={renameAI}
+        error={error}
+      />
+    )
+  }
+
+  if (phase === 'playing') {
+    return <MultiplayerGameBoard onLeave={handleLeave} />
+  }
+
+  return null
+}
+
 export const Demo: React.FC = () => {
   const aiAnimCallbackRef = React.useRef<((action: GameAction, state: any) => void) | null>(null)
+  const [multiplayerPhase, setMultiplayerPhase] = useState<MultiplayerPhase>(null)
+  const [initialRoomCode, setInitialRoomCode] = useState<string | null>(null)
+
+  // On mount, check URL for a room code parameter and auto-navigate to multiplayer join flow
+  // Also check sessionStorage for a saved multiplayer session (reconnect after refresh)
+  useEffect(() => {
+    // Check for saved multiplayer session first
+    const savedToken = sessionStorage.getItem('multiplayer-session-token')
+    const savedRoom = sessionStorage.getItem('multiplayer-room-code')
+    if (savedToken && savedRoom) {
+      // Auto-enter multiplayer reconnect mode
+      setMultiplayerPhase('reconnecting' as MultiplayerPhase)
+      return
+    }
+
+    // Then check URL for invite link
+    const params = new URLSearchParams(window.location.search)
+    const roomParam = params.get('room')
+    if (roomParam) {
+      const code = roomParam.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6)
+      if (code.length === 6) {
+        setInitialRoomCode(code)
+        setMultiplayerPhase('menu')
+      }
+      // Clean the URL parameter after extracting it
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [])
 
   const handleAIAction = useCallback((action: GameAction, gameState: any) => {
     if (aiAnimCallbackRef.current) {
@@ -1048,9 +1335,19 @@ export const Demo: React.FC = () => {
     }
   }, [])
 
+  // Multiplayer flow: wrap in MultiplayerProvider, skip single-player entirely
+  if (multiplayerPhase !== null) {
+    return (
+      <MultiplayerProvider>
+        <MultiplayerFlow phase={multiplayerPhase} onPhaseChange={setMultiplayerPhase} initialRoomCode={initialRoomCode} />
+      </MultiplayerProvider>
+    )
+  }
+
+  // Single-player flow: completely unchanged
   return (
     <GameProvider onAIAction={handleAIAction}>
-      <DemoContent aiAnimCallbackRef={aiAnimCallbackRef} />
+      <DemoContent aiAnimCallbackRef={aiAnimCallbackRef} onMultiplayer={() => setMultiplayerPhase('menu')} />
     </GameProvider>
   )
 }

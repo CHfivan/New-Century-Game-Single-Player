@@ -10,7 +10,8 @@ import { gameReducer, createInitialState } from './gameReducer'
 import { useAITurn } from './useAITurn'
 
 // Create the context with undefined default (will be provided by GameProvider)
-const GameContext = createContext<GameContextValue | undefined>(undefined)
+// Exported so multiplayer bridge can provide its own GameContextValue
+export const GameContext = createContext<GameContextValue | undefined>(undefined)
 
 /**
  * Props for GameProvider component

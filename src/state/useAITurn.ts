@@ -13,6 +13,8 @@ interface UseAITurnProps {
   onExecuteAction: (action: GameAction) => void
   onEndTurn: () => void
   onAIAction?: (action: GameAction, state: GameState) => void
+  /** When true, the hook will not schedule any AI turns. */
+  disabled?: boolean
 }
 
 /**
@@ -29,7 +31,7 @@ interface UseAITurnProps {
  * We read the latest state via a ref so the timeout closure always
  * sees fresh data.
  */
-export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction }: UseAITurnProps): void => {
+export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction, disabled }: UseAITurnProps): void => {
   const aiPlayerRef = useRef<AIPlayer | null>(null)
   const timeoutIdsRef = useRef<number[]>([])
 
@@ -53,6 +55,11 @@ export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction }: Use
   }
 
   useEffect(() => {
+    // Don't execute if disabled (e.g., non-host in multiplayer, or dealing animation in progress)
+    if (disabled) {
+      return
+    }
+
     // Don't execute if game is not in playing phase
     if (state.gamePhase !== 'playing') {
       return
@@ -85,7 +92,7 @@ export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction }: Use
     // Capture the player ID for the closure
     const playerId = currentPlayer.id
 
-    const delay = 2000 + Math.random() * 500
+    const delay = 3000 + Math.random() * 750
 
     const outerTimeout = window.setTimeout(() => {
       try {
@@ -108,7 +115,7 @@ export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction }: Use
         // Schedule end turn after a short delay
         const innerTimeout = window.setTimeout(() => {
           onEndTurnRef.current()
-        }, 500)
+        }, 750)
         timeoutIdsRef.current.push(innerTimeout)
       } catch (error) {
         console.error('AI turn execution failed:', error)
@@ -128,7 +135,7 @@ export const useAITurn = ({ state, onExecuteAction, onEndTurn, onAIAction }: Use
     }
     // Only depend on the values that determine "whose turn / can we act / which game"
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.currentPlayerIndex, state.gamePhase, state.stateSnapshot, state.gameId])
+  }, [state.currentPlayerIndex, state.gamePhase, state.stateSnapshot, state.gameId, disabled])
 
   // Cleanup all timeouts on unmount
   useEffect(() => {

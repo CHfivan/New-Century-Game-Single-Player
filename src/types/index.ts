@@ -55,6 +55,25 @@ export {
   isClaimPointCardPayload,
 } from './guards'
 
+// Multiplayer types
+export type {
+  LobbyPlayer,
+  CreateRoomPayload,
+  JoinRoomPayload,
+  ReconnectPayload,
+  GameActionPayload,
+  RoomCreatedPayload,
+  RoomJoinedPayload,
+  PlayerJoinedPayload,
+  PlayerLeftPayload,
+  StateUpdatePayload,
+  GameErrorPayload,
+  PlayerDisconnectedPayload,
+  PlayerReconnectedPayload,
+  ScoreBreakdown,
+  GameOverPayload,
+} from './multiplayer'
+
 // Utility functions
 export {
   createEmptySpiceCollection,

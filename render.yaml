@@ -1,0 +1,18 @@
+# Render Blueprint — deploy the multiplayer server
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: century-spice-road-server
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: PORT
+        value: "3001"
+      - key: ALLOWED_ORIGINS
+        value: "https://chfivan.github.io"
+      - key: RECONNECTION_WINDOW_MS
+        value: "120000"
+      - key: MAX_ROOMS
+        value: "50"

@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "outDir": "./dist",
+    "rootDir": "..",
+    "baseUrl": "..",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "paths": {
+      "../src/engine/*": ["src/engine/*"],
+      "../src/types/*": ["src/types/*"],
+      "../src/data/*": ["src/data/*"],
+      "../src/types": ["src/types/index.ts"],
+      "../src/data": ["src/data/index.ts"],
+      "../src/engine": ["src/engine/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "../src/engine/**/*.ts",
+    "../src/types/**/*.ts",
+    "../src/data/**/*.ts",
+    "../src/utils/assetUrl.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "../src/**/*.test.ts",
+    "../src/**/*.test.tsx",
+    "../src/**/*.property.test.ts"
+  ]
+}

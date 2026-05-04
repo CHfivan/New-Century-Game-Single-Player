@@ -12,6 +12,7 @@ interface PlayerScorePanelProps {
   goldCoins: number
   silverCoins: number
   victoryCardsCount: number
+  victoryCardsTarget?: number
 }
 
 export const PlayerScorePanel: React.FC<PlayerScorePanelProps> = React.memo(({
@@ -19,7 +20,9 @@ export const PlayerScorePanel: React.FC<PlayerScorePanelProps> = React.memo(({
   goldCoins,
   silverCoins,
   victoryCardsCount,
+  victoryCardsTarget,
 }) => {
+  const vcDisplay = victoryCardsTarget ? `${victoryCardsCount}/${victoryCardsTarget}` : `${victoryCardsCount}`
   return (
     <div className="player-score-panel" role="region" aria-label={`Your score: ${score} points, ${goldCoins} gold coins, ${silverCoins} silver coins, ${victoryCardsCount} victory cards`}>
       <div className="score-item" title={`Score: ${score} points`}>
@@ -35,10 +38,10 @@ export const PlayerScorePanel: React.FC<PlayerScorePanelProps> = React.memo(({
         <img src={assetUrl('/assets/image/silver_coin.png')} alt="Silver coins" className="coin-icon" />
         <span className="score-value">{silverCoins}</span>
       </div>
-      <div className="score-item" title={`${victoryCardsCount} victory cards`}>
+      <div className="score-item" title={`${victoryCardsCount} victory cards${victoryCardsTarget ? ` (need ${victoryCardsTarget})` : ''}`}>
         <span className="score-label score-label-mobile" aria-hidden="true">🏆</span>
         <span className="score-label score-label-desktop">Victory Cards:</span>
-        <span className="score-value">{victoryCardsCount}</span>
+        <span className="score-value">{vcDisplay}</span>
       </div>
     </div>
   )

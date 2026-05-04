@@ -9,11 +9,15 @@ import './HamburgerMenu.css'
 interface HamburgerMenuProps {
   onShowRules?: () => void
   onRestartGame?: () => void
+  roomCode?: string | null
+  isHost?: boolean
 }
 
 export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   onShowRules,
   onRestartGame,
+  roomCode,
+  isHost,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -128,6 +132,24 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
 
             {/* Menu Title */}
             <h2 className="hamburger-title">Menu</h2>
+
+            {/* Room Info (multiplayer only) */}
+            {roomCode && (
+              <div className="hamburger-room-info">
+                <div className="hamburger-room-label">Room Code</div>
+                <div className="hamburger-room-code">{roomCode}</div>
+                <button
+                  className="hamburger-copy-btn"
+                  onClick={() => {
+                    const link = `${window.location.origin}${window.location.pathname}?room=${roomCode}`
+                    navigator.clipboard.writeText(link).catch(() => {})
+                  }}
+                >
+                  📋 Copy Invite Link
+                </button>
+                {isHost && <div className="hamburger-host-badge">You are the Host</div>}
+              </div>
+            )}
 
             {/* Menu Options */}
             <div className="hamburger-options">

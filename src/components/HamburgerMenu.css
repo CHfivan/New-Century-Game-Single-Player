@@ -72,12 +72,14 @@
 
 /* Menu Panel */
 .hamburger-menu {
-  background: white;
-  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
   padding: 30px;
   min-width: 300px;
   max-width: 90%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   animation: slideIn 0.3s ease;
 }
@@ -96,37 +98,38 @@
 /* Close Button */
 .hamburger-close {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 35px;
-  height: 35px;
-  background: #f5f5f5;
-  border: none;
+  top: 12px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.2s ease;
-  color: #666;
+  transition: background 0.2s ease;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1;
+  padding: 0;
 }
 
 .hamburger-close:hover {
-  background: #e0e0e0;
-  color: #333;
-  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
 }
 
 .hamburger-close:focus-visible {
-  outline: 2px solid #4CAF50;
+  outline: 2px solid #FFD700;
   outline-offset: 2px;
 }
 
 /* Menu Title */
 .hamburger-title {
   margin: 0 0 20px 0;
-  color: #333;
+  color: #FFD700;
   font-size: 24px;
   font-weight: bold;
 }
@@ -139,22 +142,22 @@
 }
 
 .hamburger-option {
-  background: #f5f5f5;
-  border: 2px solid transparent;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   padding: 15px 20px;
   font-size: 16px;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s ease;
-  color: #333;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
 }
 
 .hamburger-option:hover {
-  background: #4CAF50;
+  background: rgba(76, 175, 80, 0.3);
   color: white;
-  border-color: #4CAF50;
+  border-color: rgba(76, 175, 80, 0.5);
   transform: translateX(5px);
 }
 
@@ -163,7 +166,7 @@
 }
 
 .hamburger-option:focus-visible {
-  outline: 2px solid #4CAF50;
+  outline: 2px solid #FFD700;
   outline-offset: 2px;
 }
 
@@ -189,4 +192,55 @@
     padding: 12px 16px;
     font-size: 15px;
   }
+}
+
+/* Room info section (multiplayer) */
+.hamburger-room-info {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.hamburger-room-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+
+.hamburger-room-code {
+  font-family: 'Courier New', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: #FFD700;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.hamburger-copy-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.hamburger-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hamburger-host-badge {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #4CAF50;
+  font-weight: 600;
 }

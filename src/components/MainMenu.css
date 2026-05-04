@@ -92,6 +92,17 @@
   box-shadow: 0 6px 16px rgba(33, 150, 243, 0.5);
 }
 
+.menu-btn-multiplayer {
+  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+  color: white;
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+}
+
+.menu-btn-multiplayer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(156, 39, 176, 0.5);
+}
+
 .menu-btn-rules {
   background: rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.9);

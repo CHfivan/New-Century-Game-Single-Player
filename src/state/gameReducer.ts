@@ -63,6 +63,17 @@ export const gameReducer = (state: GameState, action: StateAction): GameState =>
     }
 
     case 'END_TURN': {
+      // Only advance turn if the current player's caravan is within capacity (≤10)
+      const currentP = state.players[state.currentPlayerIndex]
+      if (currentP) {
+        const total = currentP.caravan.yellow + currentP.caravan.red +
+          currentP.caravan.green + currentP.caravan.brown
+        if (total > 10) {
+          // Caravan overflow — don't advance turn, player must discard first
+          return { ...state, stateSnapshot: null }
+        }
+      }
+
       // Advance to next player
       const nextPlayerIndex = (state.currentPlayerIndex + 1) % state.players.length
       

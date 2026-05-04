@@ -93,7 +93,7 @@ export const OpponentPanel: React.FC<OpponentPanelProps> = ({
   onPlayedCardsClick,
   onWidthChange,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded)

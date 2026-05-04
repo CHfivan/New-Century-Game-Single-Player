@@ -1,0 +1,504 @@
+/* Lobby styles — mirrors MainMenu / MultiplayerMenu dark card pattern */
+
+.lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+}
+
+.lobby-content {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 40px 36px;
+  max-width: 440px;
+  max-height: 90vh;
+  max-height: 90dvh;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+}
+
+.lobby-title {
+  color: #FFD700;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.lobby-error {
+  background: rgba(255, 107, 107, 0.15);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: #ff6b6b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 0 0 16px 0;
+}
+
+/* Room Code */
+.lobby-room-code-section {
+  margin-bottom: 20px;
+}
+
+.lobby-room-code-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.lobby-room-code {
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 42px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 12px 24px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Invite Link */
+.lobby-invite-section {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.lobby-invite-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.lobby-invite-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.lobby-invite-link {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: all;
+}
+
+.lobby-copy-btn {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.lobby-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.lobby-copy-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Player List */
+.lobby-players-section {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.lobby-players-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.lobby-player-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lobby-player-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.lobby-player-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.lobby-player-status.connected {
+  background: #4CAF50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.5);
+}
+
+.lobby-player-status.disconnected {
+  background: #888;
+}
+
+.lobby-player-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.lobby-player-name {
+  flex: 1;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.lobby-player-host-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFD700;
+  background: rgba(255, 215, 0, 0.15);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 4px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* AI badge */
+.lobby-player-ai-badge {
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lobby-ai-easy {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.lobby-ai-medium {
+  color: #FF9800;
+  background: rgba(255, 152, 0, 0.15);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.lobby-ai-hard {
+  color: #f44336;
+  background: rgba(244, 67, 54, 0.15);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* Remove AI button */
+.lobby-remove-ai-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.lobby-remove-ai-btn:hover {
+  background: rgba(244, 67, 54, 0.3);
+  border-color: rgba(244, 67, 54, 0.5);
+  color: #f44336;
+}
+
+.lobby-remove-ai-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Add AI section */
+.lobby-add-ai-section {
+  margin-bottom: 20px;
+}
+
+.lobby-add-ai-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lobby-ai-difficulty-select {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: auto;
+  min-height: 40px;
+}
+
+.lobby-ai-difficulty-select:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.lobby-ai-difficulty-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.lobby-btn-add-ai {
+  background: rgba(100, 100, 255, 0.2);
+  color: #a0a0ff;
+  border: 1px solid rgba(100, 100, 255, 0.3);
+  white-space: nowrap;
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.lobby-btn-add-ai:hover {
+  background: rgba(100, 100, 255, 0.35);
+  border-color: rgba(100, 100, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Actions */
+.lobby-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lobby-btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 48px;
+  min-width: 44px;
+  letter-spacing: 0.3px;
+}
+
+.lobby-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.lobby-btn-start {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.lobby-btn-start:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.5);
+}
+
+.lobby-btn-start:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.lobby-btn-leave {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.lobby-btn-leave:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.lobby-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive — tablet / small screens */
+@media (max-width: 768px) {
+  .lobby-content {
+    padding: 28px 20px;
+    max-width: 360px;
+  }
+
+  .lobby-title {
+    font-size: 22px;
+  }
+
+  .lobby-room-code {
+    font-size: 32px;
+    letter-spacing: 6px;
+    padding: 10px 18px;
+  }
+
+  .lobby-btn {
+    font-size: 15px;
+    padding: 12px 20px;
+  }
+}
+
+/* Mobile landscape — very limited vertical space */
+@media (max-height: 500px) {
+  .lobby {
+    padding: 8px 16px;
+  }
+
+  .lobby-content {
+    padding: 12px 16px;
+    border-radius: 10px;
+    max-height: 95vh;
+    max-height: 95dvh;
+  }
+
+  .lobby-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .lobby-room-code-section {
+    margin-bottom: 10px;
+  }
+
+  .lobby-room-code {
+    font-size: 24px;
+    letter-spacing: 4px;
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+
+  .lobby-room-code-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .lobby-invite-section {
+    margin-bottom: 10px;
+  }
+
+  .lobby-invite-row {
+    padding: 4px 8px;
+  }
+
+  .lobby-players-section {
+    margin-bottom: 10px;
+  }
+
+  .lobby-player-item {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .lobby-player-icon {
+    font-size: 16px;
+  }
+
+  .lobby-player-name {
+    font-size: 13px;
+  }
+
+  .lobby-actions {
+    gap: 6px;
+  }
+
+  .lobby-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    min-height: 32px;
+    border-radius: 6px;
+  }
+}
+
+
+/* Editable AI player name */
+.lobby-player-name-editable {
+  cursor: pointer;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+  transition: border-color 0.2s;
+}
+
+.lobby-player-name-editable:hover {
+  border-bottom-color: rgba(255, 215, 0, 0.6);
+  color: #FFD700;
+}
+
+.lobby-player-name-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 2px 6px;
+  outline: none;
+  min-width: 0;
+}
+
+.lobby-player-name-input:focus {
+  border-color: #FFD700;
+  box-shadow: 0 0 4px rgba(255, 215, 0, 0.3);
+}

@@ -39,8 +39,8 @@ export const DEFAULT_CONFIG: GameConfig = {
   },
   
   victoryCardThreshold: {
-    players2_3: 5,
-    players4_5: 6
+    players2_3: 6,
+    players4_5: 5
   },
   
   merchantRowSize: 6,

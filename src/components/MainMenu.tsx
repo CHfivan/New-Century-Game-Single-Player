@@ -13,9 +13,10 @@ import './MainMenu.css'
 interface MainMenuProps {
   onStartGame: (playerCount: number, aiCount: number, aiDifficulty: 'easy' | 'medium' | 'hard') => void
   onLoadGame: () => void
+  onMultiplayer?: () => void
 }
 
-export const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onLoadGame }) => {
+export const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onLoadGame, onMultiplayer }) => {
   const [hasSavedGame, setHasSavedGame] = useState(false)
   const [showNewGameDialog, setShowNewGameDialog] = useState(false)
   const [showRules, setShowRules] = useState(false)
@@ -52,6 +53,16 @@ export const MainMenu: React.FC<MainMenuProps> = ({ onStartGame, onLoadGame }) =
               aria-label="Load saved game"
             >
               💾 Load Game
+            </button>
+          )}
+
+          {onMultiplayer && (
+            <button
+              className="menu-btn menu-btn-multiplayer"
+              onClick={onMultiplayer}
+              aria-label="Play multiplayer"
+            >
+              🌐 Multiplayer
             </button>
           )}
 

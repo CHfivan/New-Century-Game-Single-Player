@@ -4,18 +4,19 @@
  */
 
 import React from 'react'
-import { Caravan, SpiceType } from '../types'
+import { SpiceCollection, SpiceType } from '../types'
 import { CaravanGrid } from './CaravanGrid'
 import './PlayerCaravan.css'
 
 interface PlayerCaravanProps {
-  caravan: Caravan
+  caravan: SpiceCollection
   playerName: string
   onCubeClick?: (type: SpiceType, index: number) => void
   pickedCubeIndex?: number | null
   usedIndices?: Set<number>
   playedCardsCount?: number
   onPlayedCardsClick?: () => void
+  onActionLogClick?: () => void
 }
 
 export const PlayerCaravan: React.FC<PlayerCaravanProps> = ({
@@ -26,6 +27,7 @@ export const PlayerCaravan: React.FC<PlayerCaravanProps> = ({
   usedIndices,
   playedCardsCount = 0,
   onPlayedCardsClick,
+  onActionLogClick,
 }) => {
   const totalSpices = caravan.yellow + caravan.red + caravan.green + caravan.brown
 

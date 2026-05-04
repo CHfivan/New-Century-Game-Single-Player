@@ -1,0 +1,416 @@
+/* MultiplayerGameBoard styles — dark card pattern matching Lobby / MultiplayerMenu */
+
+.mp-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+}
+
+.mp-board-content {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 32px 28px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mp-board-loading {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Error banner */
+.mp-board-error {
+  background: rgba(255, 107, 107, 0.15);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: #ff6b6b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Disconnection notices */
+.mp-board-disconnections {
+  margin-bottom: 16px;
+}
+
+.mp-board-disconnect-notice {
+  background: rgba(255, 193, 7, 0.12);
+  border: 1px solid rgba(255, 193, 7, 0.35);
+  color: #ffc107;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+/* Turn indicator */
+.mp-board-turn-indicator {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 14px 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+}
+
+.mp-board-turn-indicator.my-turn {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+/* Game info row */
+.mp-board-info {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.mp-board-info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mp-board-info-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mp-board-info-value {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Player list */
+.mp-board-players {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.mp-board-players-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0 0 10px 0;
+}
+
+.mp-board-player-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mp-board-player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.mp-board-player-item.active {
+  background: rgba(255, 215, 0, 0.08);
+  border-color: rgba(255, 215, 0, 0.2);
+}
+
+.mp-board-player-item.me {
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.mp-board-player-name {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-board-you-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 4px;
+  padding: 1px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mp-board-player-score {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Placeholder for full board */
+.mp-board-placeholder {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+.mp-board-caravan-summary {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Error / disconnect overlays (shown on top of the full game board) */
+.mp-board-error-overlay {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: rgba(255, 107, 107, 0.92);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  animation: mp-overlay-fade-in 0.3s ease;
+}
+
+.mp-board-disconnect-overlay {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  animation: mp-overlay-fade-in 0.3s ease;
+}
+
+@keyframes mp-overlay-fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Game over */
+.mp-board-ended {
+  text-align: center;
+}
+
+.mp-board-ended-title {
+  color: #FFD700;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.mp-board-winner {
+  font-size: 20px;
+  color: #fff;
+  margin: 0 0 20px 0;
+}
+
+.mp-board-scores {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.mp-board-scores-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0 0 10px 0;
+}
+
+.mp-board-score-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mp-board-score-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.mp-board-score-name {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mp-board-score-details {
+  color: #FFD700;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mp-board-score-breakdown {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: 6px;
+}
+
+/* Buttons */
+.mp-board-ended-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mp-board-btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 48px;
+  min-width: 44px;
+  letter-spacing: 0.3px;
+  width: 100%;
+}
+
+.mp-board-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.mp-board-btn-leave {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mp-board-btn-leave:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.mp-board-btn-lobby {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.mp-board-btn-lobby:hover {
+  background: rgba(76, 175, 80, 0.35);
+  transform: translateY(-2px);
+}
+
+.mp-board-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mp-board-content {
+    padding: 24px 18px;
+    max-width: 380px;
+  }
+
+  .mp-board-turn-indicator {
+    font-size: 17px;
+    padding: 10px 16px;
+  }
+
+  .mp-board-ended-title {
+    font-size: 22px;
+  }
+
+  .mp-board-btn {
+    font-size: 15px;
+    padding: 12px 20px;
+  }
+}
+
+@media (max-height: 500px) {
+  .mp-board {
+    padding: 8px 16px;
+  }
+
+  .mp-board-content {
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+
+  .mp-board-turn-indicator {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+  }
+
+  .mp-board-info {
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .mp-board-players {
+    margin-bottom: 10px;
+  }
+
+  .mp-board-player-item {
+    padding: 6px 10px;
+  }
+
+  .mp-board-placeholder {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  .mp-board-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    min-height: 32px;
+    border-radius: 6px;
+  }
+}

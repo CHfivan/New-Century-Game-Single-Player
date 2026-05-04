@@ -1,0 +1,249 @@
+/* MultiplayerMenu styles — mirrors MainMenu dark card pattern */
+
+.multiplayer-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  text-align: center;
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.multiplayer-menu-content {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 420px;
+  max-height: 90vh;
+  max-height: 90dvh;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-y: auto;
+}
+
+.multiplayer-menu-title {
+  color: #FFD700;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.multiplayer-menu-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin: 0 0 28px 0;
+  font-weight: 400;
+}
+
+.multiplayer-menu-error {
+  background: rgba(255, 107, 107, 0.15);
+  border: 1px solid rgba(255, 107, 107, 0.4);
+  color: #ff6b6b;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 0 0 20px 0;
+}
+
+.multiplayer-menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mp-menu-btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 48px;
+  min-width: 44px;
+  letter-spacing: 0.3px;
+}
+
+.mp-menu-btn:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+.mp-menu-btn-create {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.mp-menu-btn-create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.5);
+}
+
+.mp-menu-btn-join {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.mp-menu-btn-join:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(33, 150, 243, 0.5);
+}
+
+.mp-menu-btn-primary {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.mp-menu-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.5);
+}
+
+.mp-menu-btn-back {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mp-menu-btn-back:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.mp-menu-btn:active {
+  transform: translateY(0);
+}
+
+/* Room code input field */
+.multiplayer-menu-field {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.multiplayer-menu-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.multiplayer-menu-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-align: center;
+  text-transform: uppercase;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.multiplayer-menu-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 400;
+  letter-spacing: 4px;
+}
+
+.multiplayer-menu-input:focus {
+  border-color: #FFD700;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+}
+
+.multiplayer-menu-field-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin: 6px 0 0 0;
+}
+
+/* Responsive — tablet / small screens */
+@media (max-width: 768px) {
+  .multiplayer-menu {
+    justify-content: flex-start;
+    padding-top: 60px;
+  }
+
+  .multiplayer-menu-content {
+    padding: 32px 24px;
+    max-width: 340px;
+  }
+
+  .multiplayer-menu-title {
+    font-size: 22px;
+  }
+
+  .mp-menu-btn {
+    font-size: 15px;
+    padding: 12px 20px;
+  }
+
+  .multiplayer-menu-input {
+    font-size: 18px;
+    letter-spacing: 4px;
+  }
+}
+
+/* Mobile landscape — very limited vertical space */
+@media (max-height: 500px) {
+  .multiplayer-menu {
+    padding: 8px 16px;
+  }
+
+  .multiplayer-menu-content {
+    padding: 12px 20px;
+    border-radius: 10px;
+    max-height: 95vh;
+    max-height: 95dvh;
+  }
+
+  .multiplayer-menu-title {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  .multiplayer-menu-subtitle {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .multiplayer-menu-field {
+    margin-bottom: 10px;
+  }
+
+  .multiplayer-menu-input {
+    padding: 6px 10px;
+    font-size: 16px;
+    letter-spacing: 3px;
+  }
+
+  .multiplayer-menu-buttons {
+    gap: 6px;
+  }
+
+  .mp-menu-btn {
+    padding: 6px 14px;
+    font-size: 12px;
+    min-height: 32px;
+    border-radius: 6px;
+  }
+}

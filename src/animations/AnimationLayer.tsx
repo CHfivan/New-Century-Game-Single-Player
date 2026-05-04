@@ -78,7 +78,7 @@ export function useAnimations() {
       const id = ++idRef.current
 
       if (anim.type === 'shake') {
-        const duration = anim.duration ?? 400
+        const duration = anim.duration ?? 600
         const el = document.querySelector(anim.targetSelector) as HTMLElement | null
         if (el) {
           el.classList.add('anim-shake')
@@ -96,10 +96,10 @@ export function useAnimations() {
         // Row slide is handled entirely by the render component via CSS
         // Total duration = stagger * (count - removedIndex) + slideDuration + fade
         const count = anim.cardRects.length
-        const stagger = anim.staggerDelay ?? 150
-        const slideDur = anim.slideDuration ?? 500
+        const stagger = anim.staggerDelay ?? 225
+        const slideDur = anim.slideDuration ?? 750
         const cardsToSlide = count - anim.removedIndex - 1
-        const totalDuration = stagger * cardsToSlide + slideDur + 500 // +500 for new card fade
+        const totalDuration = stagger * cardsToSlide + slideDur + 750 // +750 for new card fade
 
         setActive(prev => [...prev, { id, anim, phase: 'starting' }])
 
@@ -117,7 +117,7 @@ export function useAnimations() {
         return
       }
 
-      const duration = anim.duration ?? 450
+      const duration = anim.duration ?? 675
 
       setActive(prev => [...prev, { id, anim, phase: 'starting' }])
 
@@ -160,7 +160,7 @@ export const AnimationLayer: React.FC<AnimationLayerProps> = ({ animations }) =>
     <div className="animation-layer">
       {animations.map(({ id, anim, phase }) => {
         if (anim.type === 'card-fly') {
-          const dur = anim.duration ?? 450
+          const dur = anim.duration ?? 675
           const isRunning = phase === 'running'
           const rect = isRunning ? anim.to : anim.from
           return (
@@ -182,7 +182,7 @@ export const AnimationLayer: React.FC<AnimationLayerProps> = ({ animations }) =>
         }
 
         if (anim.type === 'cube-move') {
-          const dur = anim.duration ?? 350
+          const dur = anim.duration ?? 525
           const isRunning = phase === 'running'
           const rect = isRunning ? anim.to : anim.from
           return (
@@ -204,8 +204,8 @@ export const AnimationLayer: React.FC<AnimationLayerProps> = ({ animations }) =>
 
         if (anim.type === 'row-slide') {
           const isRunning = phase === 'running'
-          const stagger = anim.staggerDelay ?? 150
-          const slideDur = anim.slideDuration ?? 500
+          const stagger = anim.staggerDelay ?? 225
+          const slideDur = anim.slideDuration ?? 750
           const removedIdx = anim.removedIndex
           const rects = anim.cardRects
           const htmls = anim.cardHtmls
@@ -278,7 +278,7 @@ export const AnimationLayer: React.FC<AnimationLayerProps> = ({ animations }) =>
                     zIndex: 799,
                     pointerEvents: 'none',
                     transition: isRunning
-                      ? `opacity 500ms ease-in ${newCardDelay}ms`
+                      ? `opacity 750ms ease-in ${newCardDelay}ms`
                       : 'none',
                   }}
                   dangerouslySetInnerHTML={{ __html: anim.newCardHtml }}
