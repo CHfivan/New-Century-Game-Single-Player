@@ -32,6 +32,7 @@ import { isConversionCard, isExchangeCard, isSpiceCard, getTotalSpices, addSpice
 import { GameEngine } from './engine/GameEngine'
 import { useAnimations, AnimationLayer, RowSlideAnimation } from './animations/AnimationLayer'
 import { MultiplayerProvider, useMultiplayer } from './multiplayer/MultiplayerContext'
+import { assetUrl } from './utils/assetUrl'
 import { MultiplayerMenu } from './components/multiplayer/MultiplayerMenu'
 import { Lobby } from './components/multiplayer/Lobby'
 import { MultiplayerGameBoard } from './components/multiplayer/MultiplayerGameBoard'
@@ -283,7 +284,8 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
             })
           }
           // Get the new card's image URL from the server state if available
-          const newCardUrl = newState?.merchantCardRow?.[newState.merchantCardRow.length - 1]?.imageUrl
+          const rawNewCardUrl = newState?.merchantCardRow?.[newState.merchantCardRow.length - 1]?.imageUrl
+          const newCardUrl = rawNewCardUrl ? assetUrl(rawNewCardUrl) : undefined
           // Row slide for merchant cards
           const slideAnim = captureRowSlide(
             '.merchant-card',
@@ -310,7 +312,8 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
             })
           }
           // Get the new card's image URL from the server state if available
-          const newPointCardUrl = newState?.pointCardRow?.[newState.pointCardRow.length - 1]?.imageUrl
+          const rawNewPointCardUrl = newState?.pointCardRow?.[newState.pointCardRow.length - 1]?.imageUrl
+          const newPointCardUrl = rawNewPointCardUrl ? assetUrl(rawNewPointCardUrl) : undefined
           // Row slide for point cards
           const pointSlideAnim = captureRowSlide(
             '.point-card',
