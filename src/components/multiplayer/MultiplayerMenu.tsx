@@ -65,6 +65,7 @@ export const MultiplayerMenu: React.FC<MultiplayerMenuProps> = ({
       <ProfileSetup
         onSubmit={(name, icon) => onJoinRoom(roomCode, name, icon)}
         onBack={() => setScreen('join-code')}
+        error={error && error.includes('NAME_TAKEN') ? 'The name is taken. Please enter a different name.' : error}
       />
     )
   }

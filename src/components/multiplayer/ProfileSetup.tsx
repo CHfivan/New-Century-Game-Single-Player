@@ -16,16 +16,21 @@ interface ProfileSetupProps {
   defaultPlayerNumber?: number
   onSubmit: (name: string, icon: string) => void
   onBack: () => void
+  error?: string | null
 }
 
 export const ProfileSetup: React.FC<ProfileSetupProps> = ({
   defaultPlayerNumber = 1,
   onSubmit,
   onBack,
+  error: externalError,
 }) => {
   const [name, setName] = useState('')
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+
+  // Show external error (from server) if present
+  const displayError = externalError || error
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -80,11 +85,11 @@ export const ProfileSetup: React.FC<ProfileSetupProps> = ({
             onFocus={(e) => setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)}
             placeholder={`Player ${defaultPlayerNumber}`}
             maxLength={MAX_NAME_LENGTH}
-            aria-describedby={error ? 'profile-name-error' : undefined}
+            aria-describedby={displayError ? 'profile-name-error' : undefined}
           />
-          {error && (
+          {displayError && (
             <p id="profile-name-error" className="profile-setup-error" role="alert">
-              {error}
+              {displayError}
             </p>
           )}
         </div>

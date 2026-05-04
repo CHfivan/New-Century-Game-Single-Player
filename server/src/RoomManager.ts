@@ -126,6 +126,12 @@ export class RoomManager {
     const sessionToken = crypto.randomUUID()
     const now = Date.now()
 
+    // Reject duplicate names
+    const existingNames = new Set(room.players.map(p => p.name.toLowerCase()))
+    if (existingNames.has(playerName.trim().toLowerCase())) {
+      throw new Error('NAME_TAKEN')
+    }
+
     const player: RoomPlayer = {
       sessionToken,
       socketId: null,
