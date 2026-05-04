@@ -188,7 +188,6 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
     const countRef = rowType === 'merchant' ? merchantHideCountRef : pointHideCountRef
     const myCount = ++countRef.current
     const selector = rowType === 'merchant' ? '.merchant-card-row' : '.point-card-row'
-    const cardSelector = rowType === 'merchant' ? '.merchant-card' : '.point-card'
     const rowEl = document.querySelector(selector) as HTMLElement | null
     if (rowEl) rowEl.style.visibility = 'hidden'
     setHidden(true)
@@ -199,35 +198,35 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
     const cardsToSlide = slideAnim.cardRects.length - slideAnim.removedIndex - 1
     const slideEndTime = stagger * cardsToSlide + slideDur
 
-    // After React renders the new state, capture the new last card and fade it in
+    // Capture the new last card from the DOM and fade it in.
+    // In multiplayer, the server state (LOAD_GAME) is applied at ~2500ms,
+    // so we must wait until after that to read the correct new card from the DOM.
+    // Use max(slideEndTime - 100, 2600) to ensure we capture after state update.
+    const captureDelay = Math.max(slideEndTime - 100, 2600)
     setTimeout(() => {
       // Scope query to the actual row (not animation clones in body)
       const rowContainer = document.querySelector(selector)
       if (!rowContainer) return
-      const newCards = rowContainer.querySelectorAll(cardSelector.replace('.', ''))
-        ? rowContainer.querySelectorAll(rowType === 'merchant' ? '.merchant-card' : '.point-card')
-        : []
+      const newCards = rowContainer.querySelectorAll(rowType === 'merchant' ? '.merchant-card' : '.point-card')
       if (newCards.length > 0 && slideAnim.cardRects.length > 0) {
         const lastRect = slideAnim.cardRects[slideAnim.cardRects.length - 1]!
         const lastCard = newCards[newCards.length - 1]
         if (lastCard) {
           const html = lastCard.outerHTML
-          setTimeout(() => {
-            playAnimation({
-              type: 'row-slide',
-              cardRects: [],
-              cardHtmls: [],
-              removedIndex: -1,
-              newCardHtml: html,
-              deckRect: { left: lastRect.left, top: lastRect.top, width: lastRect.width, height: lastRect.height },
-              deckHtml: undefined,
-              staggerDelay: 0,
-              slideDuration: 0,
-            })
-          }, slideEndTime - 50)
+          playAnimation({
+            type: 'row-slide',
+            cardRects: [],
+            cardHtmls: [],
+            removedIndex: -1,
+            newCardHtml: html,
+            deckRect: { left: lastRect.left, top: lastRect.top, width: lastRect.width, height: lastRect.height },
+            deckHtml: undefined,
+            staggerDelay: 0,
+            slideDuration: 0,
+          })
         }
       }
-    }, 50)
+    }, captureDelay)
 
     playAnimation(slideAnim).then(() => {
       if (countRef.current === myCount) {
