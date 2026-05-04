@@ -136,7 +136,7 @@ export const MultiplayerGameBoard: React.FC<MultiplayerGameBoardProps> = ({ onLe
   const hasServerState = gameState !== null
 
   // Ref for the animation callback that DemoContent registers.
-  const aiAnimCallbackRef = useRef<((action: GameAction, state: any, newState?: any) => void) | null>(null)
+  const aiAnimCallbackRef = useRef<((action: GameAction, state: any) => void) | null>(null)
   const animTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // ── Animation queue system ──────────────────────────────────────────────
@@ -179,19 +179,23 @@ export const MultiplayerGameBoard: React.FC<MultiplayerGameBoardProps> = ({ onLe
     const isRemote = action !== null && playerIndex !== null && playerIndex !== myPlayerIndex
 
     if (isRemote && aiAnimCallbackRef.current && action) {
-      // Trigger animation using the current local state AND the new server state
-      // so the fade-in card can use the correct new card from the server
-      aiAnimCallbackRef.current(action, localStateRef.current, gs)
+      // Trigger animation using the current local state
+      aiAnimCallbackRef.current(action, localStateRef.current)
 
-      // Wait for animation to complete, then apply the authoritative server state
+      // Apply the server state immediately so the DOM has the correct new cards.
+      // The row is hidden during animation (visibility: hidden), so the user
+      // won't see the state jump. The DOM capture for the fade-in new card
+      // will then read the correct card with full rendering.
+      const tagged = tagPlayers(gs, myPlayerIndex)
+      localDispatch({ type: 'LOAD_GAME', payload: tagged })
+
+      // Wait for animation to complete before processing the next update
       if (animTimerRef.current) clearTimeout(animTimerRef.current)
       animTimerRef.current = setTimeout(() => {
-        const tagged = tagPlayers(gs, myPlayerIndex)
-        localDispatch({ type: 'LOAD_GAME', payload: tagged })
         isProcessingRef.current = false
         // Process next queued update after a short pause
         setTimeout(() => processNextUpdate(), 750)
-      }, 2500) // Apply just before animation clones disappear
+      }, 2500)
     } else {
       // Local action or no animation needed — apply immediately
       const tagged = tagPlayers(gs, myPlayerIndex)

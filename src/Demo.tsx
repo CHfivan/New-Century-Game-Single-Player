@@ -32,7 +32,6 @@ import { isConversionCard, isExchangeCard, isSpiceCard, getTotalSpices, addSpice
 import { GameEngine } from './engine/GameEngine'
 import { useAnimations, AnimationLayer, RowSlideAnimation } from './animations/AnimationLayer'
 import { MultiplayerProvider, useMultiplayer } from './multiplayer/MultiplayerContext'
-import { assetUrl } from './utils/assetUrl'
 import { MultiplayerMenu } from './components/multiplayer/MultiplayerMenu'
 import { Lobby } from './components/multiplayer/Lobby'
 import { MultiplayerGameBoard } from './components/multiplayer/MultiplayerGameBoard'
@@ -78,7 +77,7 @@ type DialogState =
   | { type: 'exchange'; card: MerchantCard }
   | { type: 'discard'; pendingAction: GameAction }
 
-export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action: GameAction, state: any, newState?: any) => void) | null>; onMultiplayer?: () => void; triggerDealing?: boolean; onLeaveGame?: () => void; onNewGame?: () => void; roomCode?: string | null; isHost?: boolean; onDiscard?: (toDiscard: SpiceCollection) => void }> = ({ aiAnimCallbackRef, onMultiplayer, triggerDealing, onLeaveGame, onNewGame, roomCode, isHost, onDiscard }) => {
+export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<((action: GameAction, state: any) => void) | null>; onMultiplayer?: () => void; triggerDealing?: boolean; onLeaveGame?: () => void; onNewGame?: () => void; roomCode?: string | null; isHost?: boolean; onDiscard?: (toDiscard: SpiceCollection) => void }> = ({ aiAnimCallbackRef, onMultiplayer, triggerDealing, onLeaveGame, onNewGame, roomCode, isHost, onDiscard }) => {
   const { state, dispatch, currentPlayer, isHumanTurn } = useGame()
   const [opponentPanelWidth, setOpponentPanelWidth] = useState(300)
   const [playedCardsPlayerId, setPlayedCardsPlayerId] = useState<string | null>(null)
@@ -183,8 +182,7 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
   /** Play a row-slide animation with the real row hidden during the animation */
   const playRowSlide = useCallback((
     slideAnim: RowSlideAnimation,
-    rowType: 'merchant' | 'point',
-    newCardImageUrl?: string
+    rowType: 'merchant' | 'point'
   ) => {
     const setHidden = rowType === 'merchant' ? setMerchantRowHidden : setPointRowHidden
     const countRef = rowType === 'merchant' ? merchantHideCountRef : pointHideCountRef
@@ -200,57 +198,32 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
     const cardsToSlide = slideAnim.cardRects.length - slideAnim.removedIndex - 1
     const slideEndTime = stagger * cardsToSlide + slideDur
 
-    // Build the new card HTML for fade-in.
-    // If we have a newCardImageUrl (from server state), build it directly.
-    // Otherwise, capture from DOM after a short delay (single-player path).
-    if (newCardImageUrl) {
-      // Build card HTML from the image URL — use the last card's dimensions
-      const lastRect = slideAnim.cardRects[slideAnim.cardRects.length - 1]
-      if (lastRect) {
-        const cardClass = rowType === 'merchant' ? 'merchant-card' : 'point-card'
-        const html = `<div class="${cardClass}" style="width:${lastRect.width}px;height:${lastRect.height}px;"><img src="${newCardImageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;" /></div>`
-        setTimeout(() => {
-          playAnimation({
-            type: 'row-slide',
-            cardRects: [],
-            cardHtmls: [],
-            removedIndex: -1,
-            newCardHtml: html,
-            deckRect: { left: lastRect.left, top: lastRect.top, width: lastRect.width, height: lastRect.height },
-            deckHtml: undefined,
-            staggerDelay: 0,
-            slideDuration: 0,
-          })
-        }, slideEndTime - 50)
-      }
-    } else {
-      // Single-player: state is applied immediately, so capture from DOM after short delay
-      setTimeout(() => {
-        const rowContainer = document.querySelector(selector)
-        if (!rowContainer) return
-        const newCards = rowContainer.querySelectorAll(rowType === 'merchant' ? '.merchant-card' : '.point-card')
-        if (newCards.length > 0 && slideAnim.cardRects.length > 0) {
-          const lastRect = slideAnim.cardRects[slideAnim.cardRects.length - 1]!
-          const lastCard = newCards[newCards.length - 1]
-          if (lastCard) {
-            const html = lastCard.outerHTML
-            setTimeout(() => {
-              playAnimation({
-                type: 'row-slide',
-                cardRects: [],
-                cardHtmls: [],
-                removedIndex: -1,
-                newCardHtml: html,
-                deckRect: { left: lastRect.left, top: lastRect.top, width: lastRect.width, height: lastRect.height },
-                deckHtml: undefined,
-                staggerDelay: 0,
-                slideDuration: 0,
-              })
-            }, slideEndTime - 50)
-          }
+    // After React renders the new state, capture the new last card and fade it in
+    setTimeout(() => {
+      const rowContainer = document.querySelector(selector)
+      if (!rowContainer) return
+      const newCards = rowContainer.querySelectorAll(rowType === 'merchant' ? '.merchant-card' : '.point-card')
+      if (newCards.length > 0 && slideAnim.cardRects.length > 0) {
+        const lastRect = slideAnim.cardRects[slideAnim.cardRects.length - 1]!
+        const lastCard = newCards[newCards.length - 1]
+        if (lastCard) {
+          const html = lastCard.outerHTML
+          setTimeout(() => {
+            playAnimation({
+              type: 'row-slide',
+              cardRects: [],
+              cardHtmls: [],
+              removedIndex: -1,
+              newCardHtml: html,
+              deckRect: { left: lastRect.left, top: lastRect.top, width: lastRect.width, height: lastRect.height },
+              deckHtml: undefined,
+              staggerDelay: 0,
+              slideDuration: 0,
+            })
+          }, slideEndTime - 50)
         }
-      }, 50)
-    }
+      }
+    }, 50)
 
     playAnimation(slideAnim).then(() => {
       if (countRef.current === myCount) {
@@ -262,7 +235,7 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
 
   // Register AI animation callback so GameProvider can trigger animations during AI turns
   useEffect(() => {
-    aiAnimCallbackRef.current = (action: GameAction, gameState: any, newState?: any) => {
+    aiAnimCallbackRef.current = (action: GameAction, gameState: any) => {
       // Log AI actions
       addLogEntry(action, gameState)
 
@@ -283,16 +256,13 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
               to: { left: to.left + 20, top: to.top + 40, width: from.width * 0.4, height: from.height * 0.4 },
             })
           }
-          // Get the new card's image URL from the server state if available
-          const rawNewCardUrl = newState?.merchantCardRow?.[newState.merchantCardRow.length - 1]?.imageUrl
-          const newCardUrl = rawNewCardUrl ? assetUrl(rawNewCardUrl) : undefined
           // Row slide for merchant cards
           const slideAnim = captureRowSlide(
             '.merchant-card',
             '.merchant-card-row .deck-card',
             payload.cardIndex
           )
-          if (slideAnim) playRowSlide(slideAnim, 'merchant', newCardUrl)
+          if (slideAnim) playRowSlide(slideAnim, 'merchant')
         }
       } else if (action.type === 'CLAIM_POINT_CARD') {
         const payload = action.payload as { cardIndex: number }
@@ -311,16 +281,13 @@ export const DemoContent: React.FC<{ aiAnimCallbackRef: React.MutableRefObject<(
               to: { left: to.left + 20, top: to.top + 40, width: from.width * 0.4, height: from.height * 0.4 },
             })
           }
-          // Get the new card's image URL from the server state if available
-          const rawNewPointCardUrl = newState?.pointCardRow?.[newState.pointCardRow.length - 1]?.imageUrl
-          const newPointCardUrl = rawNewPointCardUrl ? assetUrl(rawNewPointCardUrl) : undefined
           // Row slide for point cards
           const pointSlideAnim = captureRowSlide(
             '.point-card',
             '.point-card-row .deck-card',
             payload.cardIndex
           )
-          if (pointSlideAnim) playRowSlide(pointSlideAnim, 'point', newPointCardUrl)
+          if (pointSlideAnim) playRowSlide(pointSlideAnim, 'point')
         }
       }
     }
@@ -1328,7 +1295,7 @@ const MultiplayerFlow: React.FC<{ phase: MultiplayerPhase; onPhaseChange: (phase
 }
 
 export const Demo: React.FC = () => {
-  const aiAnimCallbackRef = React.useRef<((action: GameAction, state: any, newState?: any) => void) | null>(null)
+  const aiAnimCallbackRef = React.useRef<((action: GameAction, state: any) => void) | null>(null)
   const [multiplayerPhase, setMultiplayerPhase] = useState<MultiplayerPhase>(null)
   const [initialRoomCode, setInitialRoomCode] = useState<string | null>(null)
 
