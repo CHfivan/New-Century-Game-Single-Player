@@ -136,7 +136,7 @@ export const MultiplayerGameBoard: React.FC<MultiplayerGameBoardProps> = ({ onLe
   const hasServerState = gameState !== null
 
   // Ref for the animation callback that DemoContent registers.
-  const aiAnimCallbackRef = useRef<((action: GameAction, state: any) => void) | null>(null)
+  const aiAnimCallbackRef = useRef<((action: GameAction, state: any, newState?: any) => void) | null>(null)
   const animTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // ── Animation queue system ──────────────────────────────────────────────
@@ -179,8 +179,9 @@ export const MultiplayerGameBoard: React.FC<MultiplayerGameBoardProps> = ({ onLe
     const isRemote = action !== null && playerIndex !== null && playerIndex !== myPlayerIndex
 
     if (isRemote && aiAnimCallbackRef.current && action) {
-      // Trigger animation using the current local state
-      aiAnimCallbackRef.current(action, localStateRef.current)
+      // Trigger animation using the current local state AND the new server state
+      // so the fade-in card can use the correct new card from the server
+      aiAnimCallbackRef.current(action, localStateRef.current, gs)
 
       // Wait for animation to complete, then apply the authoritative server state
       if (animTimerRef.current) clearTimeout(animTimerRef.current)
